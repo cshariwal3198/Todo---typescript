@@ -12,11 +12,9 @@ exports.TodoItem = void 0;
 var TodoItem = /** @class */ (function () {
     function TodoItem(name, isCompleted, index) {
         if (isCompleted === void 0) { isCompleted = false; }
-        return {
-            name: name,
-            isCompleted: isCompleted,
-            id: index
-        };
+        this.name = name;
+        this.isCompleted = isCompleted;
+        this.id = index;
     }
     return TodoItem;
 }());

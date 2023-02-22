@@ -1,4 +1,4 @@
-import {TodoItem} from "../utils/todo-item"
+import { TodoItem } from "../utils/todo-item.js"
 
 const todoApiURL = "https://mk-todo-web-api.azurewebsites.net/api/ChethanTodoItems"
 const deleteApiURL = "https://mk-todo-web-api.azurewebsites.net/ChethanTodoItems/deleteAll"
@@ -17,10 +17,10 @@ class OptionObject{
     }
 }
 
-export function cloudStore(){
+function cloudStore(){
     return {
 
-        getTodoCloud: async function(){
+        getTodoCloud : async function(){
             return (await fetch(todoApiURL)).json()
         },
 
@@ -44,7 +44,7 @@ export function cloudStore(){
     }
 }
 
-async function setTodoCloud (apiURL : URL | string, options : Object) : Promise<any>{
+async function setTodoCloud (apiURL : string, options : Object) : Promise<any>{
     try {
         return await fetch(apiURL, options)
     } catch (error) {
@@ -52,3 +52,7 @@ async function setTodoCloud (apiURL : URL | string, options : Object) : Promise<
     }
 }
 
+
+console.log(cloudStore().getTodoCloud())
+
+// export default cloudStore

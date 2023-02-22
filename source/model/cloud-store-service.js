@@ -36,8 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.cloudStore = void 0;
-var todo_item_1 = require("../utils/todo-item");
+var todo_item_js_1 = require("../utils/todo-item.js");
 var todoApiURL = "https://mk-todo-web-api.azurewebsites.net/api/ChethanTodoItems";
 var deleteApiURL = "https://mk-todo-web-api.azurewebsites.net/ChethanTodoItems/deleteAll";
 var optionHeader = {
@@ -69,7 +68,7 @@ function cloudStore() {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, setTodoCloud(todoApiURL, new OptionObject("POST", new todo_item_1.TodoItem(value), optionHeader))];
+                        case 0: return [4 /*yield*/, setTodoCloud(todoApiURL, new OptionObject("POST", new todo_item_js_1.TodoItem(value), optionHeader))];
                         case 1: return [2 /*return*/, (_a.sent()).json()];
                     }
                 });
@@ -77,7 +76,7 @@ function cloudStore() {
         },
         putMethod: function (index, editedValue, isComplete) {
             if (isComplete === void 0) { isComplete = false; }
-            return setTodoCloud("".concat(todoApiURL, "/").concat(index), new OptionObject("PUT", new todo_item_1.TodoItem(editedValue, isComplete, index), optionHeader));
+            return setTodoCloud("".concat(todoApiURL, "/").concat(index), new OptionObject("PUT", new todo_item_js_1.TodoItem(editedValue, isComplete, index), optionHeader));
         },
         deleteMethodCloud: function (index) {
             return __awaiter(this, void 0, void 0, function () {
@@ -101,7 +100,6 @@ function cloudStore() {
         }
     };
 }
-exports.cloudStore = cloudStore;
 function setTodoCloud(apiURL, options) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
@@ -120,3 +118,5 @@ function setTodoCloud(apiURL, options) {
         });
     });
 }
+console.log(cloudStore().getTodoCloud());
+// export default cloudStore

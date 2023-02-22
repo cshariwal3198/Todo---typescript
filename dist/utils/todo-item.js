@@ -6,17 +6,10 @@
 //         id: index,
 //     }
 // }
-
-export class TodoItem{
-
-    name;
-    isCompleted;
-    id;
-
-    constructor(name: string, isCompleted : boolean = false, index ?: number){
+export class TodoItem {
+    constructor(name, isCompleted = false, index) {
         this.name = name;
         this.isCompleted = isCompleted;
         this.id = index;
     }
 }
-
