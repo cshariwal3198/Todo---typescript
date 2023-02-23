@@ -8,25 +8,25 @@ const optionHeader = {
 }
 
 class OptionObject{
-    constructor(method : string, body?: Object, header? : Object){
-       return {
-        method,
-        body,
-        header,
-       }
+    method;
+    body;
+    headers;
+    constructor(method : string, body? : {name: string, isCompleted? : boolean, index? : number}, header? : {"Content-type" : string} ){
+        this.method = method;
+        this.body = JSON.stringify(body);
+        this.headers = header
     }
 }
 
 function cloudStore(){
     return {
-
         getTodoCloud : async function(){
             return (await fetch(todoApiURL)).json()
         },
 
         postMethod : async function(value : string){
             return (await setTodoCloud(todoApiURL,new OptionObject("POST",
-                new TodoItem(value),optionHeader))).json()
+                new TodoItem(value,false,0),optionHeader))).json()
         },
 
         putMethod : function (index : number, editedValue : string, isComplete : boolean = false) {
@@ -53,6 +53,6 @@ async function setTodoCloud (apiURL : string, options : Object) : Promise<any>{
 }
 
 
-console.log(cloudStore().getTodoCloud())
-
-// export default cloudStore
+// console.log(cloudStore().getTodoCloud())
+// cloudStore().postMethod("place")
+export  { cloudStore }

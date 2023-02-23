@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.cloudStore = void 0;
 var todo_item_js_1 = require("../utils/todo-item.js");
 var todoApiURL = "https://mk-todo-web-api.azurewebsites.net/api/ChethanTodoItems";
 var deleteApiURL = "https://mk-todo-web-api.azurewebsites.net/ChethanTodoItems/deleteAll";
@@ -44,11 +45,9 @@ var optionHeader = {
 };
 var OptionObject = /** @class */ (function () {
     function OptionObject(method, body, header) {
-        return {
-            method: method,
-            body: body,
-            header: header
-        };
+        this.method = method;
+        this.body = JSON.stringify(body);
+        this.headers = header;
     }
     return OptionObject;
 }());
@@ -68,7 +67,7 @@ function cloudStore() {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, setTodoCloud(todoApiURL, new OptionObject("POST", new todo_item_js_1.TodoItem(value), optionHeader))];
+                        case 0: return [4 /*yield*/, setTodoCloud(todoApiURL, new OptionObject("POST", new todo_item_js_1.TodoItem(value, false, 0), optionHeader))];
                         case 1: return [2 /*return*/, (_a.sent()).json()];
                     }
                 });
@@ -100,6 +99,7 @@ function cloudStore() {
         }
     };
 }
+exports.cloudStore = cloudStore;
 function setTodoCloud(apiURL, options) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
@@ -118,5 +118,3 @@ function setTodoCloud(apiURL, options) {
         });
     });
 }
-console.log(cloudStore().getTodoCloud());
-// export default cloudStore

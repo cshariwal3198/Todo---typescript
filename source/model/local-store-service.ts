@@ -1,25 +1,30 @@
-import { TodoItem } from "../utils/todo-item"
+import { TodoItem } from "../utils/todo-item.js"
 
-type existingListType = { name : string, isCompleted? : boolean, id? : number}[]
+interface valueObjectType{
+    name : string,
+    isCompleted : boolean,
+    id? : number
+}
 
 export function localStore() {
     return {
 
         createTodoLocal : function (value : string) {
-            const existingList = getTodoLocal()
+            const existingList : valueObjectType[] = getTodoLocal()
             existingList.push(new TodoItem(value))
             setTodoLocal(existingList)
         },
 
-        editTodoLocal : function (previousValue : string, newValue : string, isComplete = false) {
-            const existingList = getTodoLocal()
-            existingList.splice(existingList.indexOf(returnRequireObject(previousValue,existingList)), 1, new TodoItem(newValue,isComplete))
+        editTodoLocal : function (previousValue : string, newValue : string, isCompleted = false) {
+            const existingList : valueObjectType[] = getTodoLocal()
+            existingList.splice(existingList.indexOf(returnRequiredObject(previousValue,existingList)),
+            1, new TodoItem(newValue,isCompleted))
             setTodoLocal(existingList)
         },
 
         deleteTodoLocal : function (value : string) {
-            const existingList = getTodoLocal()
-            existingList.splice(existingList.indexOf(returnRequireObject(value,existingList)), 1)
+            const existingList : valueObjectType[] = getTodoLocal()
+            existingList.splice(existingList.indexOf(returnRequiredObject(value,existingList)), 1)
             setTodoLocal(existingList)
         },
 
@@ -30,20 +35,19 @@ export function localStore() {
     }
 }
 
-export function getTodoLocal() {
+export function getTodoLocal() : valueObjectType[] {
     return JSON.parse(`${localStorage.getItem("todo") || []}`)
 }
 
-function setTodoLocal (taskValue : existingListType) {
+function setTodoLocal (taskValue : valueObjectType[]) {
     localStorage.setItem("todo", JSON.stringify(taskValue))
 }
 
-function returnRequireObject(value : string, existingList : existingListType){
+function returnRequiredObject(value : string, existingList : valueObjectType[]) : valueObjectType {
     for(let elem of existingList){
-        if(elem.name === value){
-            return elem
-        }
-    }
+        if(elem.name === value)
+        return elem; 
+    }  
 }
 
-getTodoLocal()
+console.log(getTodoLocal())

@@ -1,43 +1,57 @@
+import { appController } from "../controller/app-controller"
+
 const form = document.querySelector(".form") as HTMLFormElement
 const taskContainer = document.querySelector(".div-to-display") as HTMLDivElement
 const taskInputBlock = document.querySelector(".form-input") as HTMLInputElement
-const inputError = document.querySelector("#error-div")
+const inputError = document.querySelector("#error-div") as HTMLDivElement
 const allClear = document.querySelector(".all-clear") as HTMLButtonElement
 
 function view(){
     return {
-        createNewElement : function(elementName : string,text?: string) : HTMLElement{
-            const newElement = document.createElement(elementName)
-            text && (newElement.innerText = text)
-            return newElement
-        },
-
-        appendElementToParent : function(parent : HTMLElement, child : HTMLElement) : void{
-            parent.appendChild(child)
-        },
-
-        createEditButton : function() : HTMLElement{
-            const editButton = this.createNewElement("button","Edit")
-            editButton.addEventListener("click", ()=>"")
-            return editButton
-        },
-
-        createDeleteButton : function() : HTMLElement{
-            const deleteButton = this.createNewElement("button","X")
-            deleteButton.addEventListener("click", ()=>"")
-            return deleteButton
-        },
 
         prepareTask : function(value : {id : number | string, name : string, isCompleted : boolean}) : void{
-            let paraBlock = this.createNewElement("p")
-            let span = this.createNewElement("span",value.name)
-            this.appendElementToParent(paraBlock,span)
-            this.appendElementToParent(paraBlock,this.createDeleteButton())
-            this.appendElementToParent(paraBlock,this.createEditButton())
-            this.appendElementToParent(taskContainer,paraBlock)
+            let paraBlock = createNewElement("p")
+            let span = createNewElement("span",value.name)
+            appendElementToParent(paraBlock,span)
+            appendElementToParent(paraBlock,createDeleteButton())
+            appendElementToParent(paraBlock,createEditButton())
+            appendElementToParent(taskContainer,paraBlock)
+            taskInputBlock.value = ""
         },
+
+        showEmptyInputError: function () {
+            if (!taskInputBlock.value) {
+                inputError.innerHTML = "** please enter a task"
+                return false
+            } else {
+                inputError.innerHTML = ""
+                return true
+            }
+        }
     }
 }
 
-console.log("first program in typescript")
-view().prepareTask({id:1, name : "peter", isCompleted : false})
+
+function createNewElement(elementName : string,text?: string) : HTMLElement{
+    const newElement = document.createElement(elementName)
+    text && (newElement.innerText = text)
+    return newElement
+}
+
+function appendElementToParent(parent : HTMLElement, child : HTMLElement) : void{
+    parent.appendChild(child)
+}
+
+function createEditButton() : HTMLElement{
+    const editButton = createNewElement("button","Edit")
+    editButton.addEventListener("click", ()=> console.log("edit"))
+    return editButton
+}
+
+function createDeleteButton() : HTMLElement{
+    const deleteButton = createNewElement("button","X")
+    deleteButton.addEventListener("click", ()=>console.log("delete"))
+    return deleteButton
+}
+
+export {view}

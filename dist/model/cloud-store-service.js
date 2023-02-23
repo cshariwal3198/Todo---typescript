@@ -6,11 +6,9 @@ const optionHeader = {
 };
 class OptionObject {
     constructor(method, body, header) {
-        return {
-            method,
-            body,
-            header,
-        };
+        this.method = method;
+        this.body = JSON.stringify(body);
+        this.headers = header;
     }
 }
 function cloudStore() {
@@ -19,7 +17,7 @@ function cloudStore() {
             return (await fetch(todoApiURL)).json();
         },
         postMethod: async function (value) {
-            return (await setTodoCloud(todoApiURL, new OptionObject("POST", new TodoItem(value), optionHeader))).json();
+            return (await setTodoCloud(todoApiURL, new OptionObject("POST", new TodoItem(value, false, 0), optionHeader))).json();
         },
         putMethod: function (index, editedValue, isComplete = false) {
             return setTodoCloud(`${todoApiURL}/${index}`, new OptionObject("PUT", new TodoItem(editedValue, isComplete, index), optionHeader));
@@ -40,5 +38,6 @@ async function setTodoCloud(apiURL, options) {
         console.log("Something went wrong...!!");
     }
 }
-console.log(cloudStore().getTodoCloud());
-// export default cloudStore
+// console.log(cloudStore().getTodoCloud())
+// cloudStore().postMethod("place")
+export { cloudStore };
