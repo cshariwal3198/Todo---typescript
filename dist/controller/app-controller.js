@@ -12,7 +12,7 @@ const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud }
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore();
 const { showEmptyInputError, prepareTask } = view();
 handlePageRefresh();
-export function appController() {
+function appController() {
     return {
         deleteSingleTask: function (parentElement, value) {
             actualExecutionFunction(async () => {
@@ -23,13 +23,13 @@ export function appController() {
         editSelectedTask: function (editButton, span, index) {
             if (editButton.innerText === "Edit") {
                 previousSpanValue = span.innerText;
-                span.contentEditable = true;
+                span.contentEditable = `${true}`;
                 span.focus();
                 editButton.innerText = "Save";
             }
             else {
                 editButton.innerText = "Edit";
-                span.contentEditable = false;
+                span.contentEditable = `${false}`;
                 actualExecutionFunction(() => { putMethod(index, span.innerText); }, () => { editTodoLocal(previousSpanValue, span.innerText); });
             }
         },
@@ -55,7 +55,7 @@ function setTaskToList(event) {
 }
 async function handlePageRefresh() {
     lsGet = localStorage.getItem("storage");
-    let tasks = (lsGet === "CloudStorage") ? await getTodoCloud() : getTodoLocal();
+    const tasks = (lsGet === "CloudStorage") ? await getTodoCloud() : getTodoLocal();
     tasks.map((task) => prepareTask(task));
     store.innerText = lsGet;
 }
@@ -80,3 +80,4 @@ function actualExecutionFunction(callback1, callback2) {
 document.querySelector("form").addEventListener("submit", setTaskToList);
 store.addEventListener("click", switchBetweenStorage);
 document.querySelector(".all-clear").addEventListener("click", clearAllTasks);
+export { appController };

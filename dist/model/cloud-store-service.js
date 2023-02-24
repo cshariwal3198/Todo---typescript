@@ -38,6 +38,4 @@ async function setTodoCloud(apiURL, options) {
         console.log("Something went wrong...!!");
     }
 }
-// console.log(cloudStore().getTodoCloud())
-// cloudStore().postMethod("place")
 export { cloudStore };

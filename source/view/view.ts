@@ -1,4 +1,4 @@
-import { appController } from "../controller/app-controller"
+import { appController, valueObjectType } from "../controller/app-controller.js"
 
 const form = document.querySelector(".form") as HTMLFormElement
 const taskContainer = document.querySelector(".div-to-display") as HTMLDivElement
@@ -6,15 +6,18 @@ const taskInputBlock = document.querySelector(".form-input") as HTMLInputElement
 const inputError = document.querySelector("#error-div") as HTMLDivElement
 const allClear = document.querySelector(".all-clear") as HTMLButtonElement
 
+let {deleteSingleTask, editSelectedTask, varifyCheck} = appController()
+
 function view(){
     return {
 
-        prepareTask : function(value : {id : number | string, name : string, isCompleted : boolean}) : void{
+        prepareTask : function(value : valueObjectType) : void{
             let paraBlock = createNewElement("p")
             let span = createNewElement("span",value.name)
             appendElementToParent(paraBlock,span)
-            appendElementToParent(paraBlock,createDeleteButton())
-            appendElementToParent(paraBlock,createEditButton())
+            appendElementToParent(paraBlock, createCheckBoxElement("change", value))
+            appendElementToParent(paraBlock,createDeleteButton("click", value))
+            appendElementToParent(paraBlock,createEditButton("click", span, value))
             appendElementToParent(taskContainer,paraBlock)
             taskInputBlock.value = ""
         },
@@ -32,7 +35,7 @@ function view(){
 }
 
 
-function createNewElement(elementName : string,text?: string) : HTMLElement{
+function createNewElement(elementName : string, text?: string) : HTMLElement{
     const newElement = document.createElement(elementName)
     text && (newElement.innerText = text)
     return newElement
@@ -42,16 +45,23 @@ function appendElementToParent(parent : HTMLElement, child : HTMLElement) : void
     parent.appendChild(child)
 }
 
-function createEditButton() : HTMLElement{
-    const editButton = createNewElement("button","Edit")
-    editButton.addEventListener("click", ()=> console.log("edit"))
+function createEditButton(event : string, span : HTMLSpanElement, value : valueObjectType) : HTMLElement{
+    const editButton = createNewElement("button","Edit") as HTMLButtonElement
+    editButton.addEventListener("click", ()=>editSelectedTask(editButton,span,value.id as number))
     return editButton
 }
 
-function createDeleteButton() : HTMLElement{
+function createDeleteButton(event : string, value : valueObjectType) : HTMLElement{
     const deleteButton = createNewElement("button","X")
-    deleteButton.addEventListener("click", ()=>console.log("delete"))
+    deleteButton.addEventListener(event, ()=>deleteSingleTask((deleteButton.parentNode as HTMLElement),value))
     return deleteButton
+}
+
+function createCheckBoxElement(event : string, value : valueObjectType){
+    const check = createNewElement("input") as HTMLInputElement
+    check.type = "checkbox"
+    check.addEventListener(event, () => varifyCheck(check, value))
+    return check;
 }
 
 export {view}

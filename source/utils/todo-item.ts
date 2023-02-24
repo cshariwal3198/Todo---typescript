@@ -1,4 +1,4 @@
-export class TodoItem{
+class TodoItem{
 
     name;
     isCompleted;
@@ -11,3 +11,10 @@ export class TodoItem{
     }
 }
 
+interface valueObjectType{
+    name : string,
+    isCompleted? : boolean,
+    id? : number
+}
+
+export { TodoItem, valueObjectType }

@@ -1,7 +1,7 @@
 import { view } from "../view/view.js";
 import { cloudStore } from "../model/cloud-store-service.js";
 import { localStore, getTodoLocal } from "../model/local-store-service.js";
-import { TodoItem } from "../utils/todo-item.js";
+import { TodoItem, valueObjectType } from "../utils/todo-item.js";
 
 const taskInput = document.querySelector(".form-input") as HTMLInputElement
 const taskContainer = document.querySelector(".div-to-display") as HTMLDivElement
@@ -17,17 +17,11 @@ const { showEmptyInputError, prepareTask } = view()
 
 handlePageRefresh()
 
-interface valueObjectType{
-    name : string,
-    isCompleted : boolean,
-    id : number
-}
-
-export function appController() {
+function appController() {
     return {
         deleteSingleTask: function (parentElement : HTMLElement, value : valueObjectType) {
             actualExecutionFunction(async () => {
-                const result = await deleteMethodCloud(value.id)
+                const result = await deleteMethodCloud(value.id as number)
                 result.status === 204 && taskContainer.removeChild(parentElement)
             }, () => { deleteTodoLocal(value.name), taskContainer.removeChild(parentElement) })
         },
@@ -35,12 +29,12 @@ export function appController() {
         editSelectedTask: function (editButton : HTMLButtonElement, span : HTMLSpanElement, index : number) {
             if (editButton.innerText === "Edit") {
                 previousSpanValue = span.innerText
-                span.contentEditable = true
+                span.contentEditable = `${true}`;
                 span.focus()
                 editButton.innerText = "Save"
             } else {
                 editButton.innerText = "Edit"
-                span.contentEditable = false
+                span.contentEditable = `${false}`
                 actualExecutionFunction(() => { putMethod(index, span.innerText) },
                     () => { editTodoLocal(previousSpanValue, span.innerText) })
             }
@@ -49,11 +43,11 @@ export function appController() {
         varifyCheck: async function (check : HTMLInputElement, value : valueObjectType) {
 
             if (check.checked === true) {
-                actualExecutionFunction(() => { putMethod(value.id, value.name, true) },
+                actualExecutionFunction(() => { putMethod(value.id as number, value.name, true) },
                     () => { editTodoLocal(value.name, value.name, true) });
                 (check.parentElement as HTMLElement).style.textDecoration = "line-through"
             } else {
-                actualExecutionFunction(() => { putMethod(value.id, value.name, false) },
+                actualExecutionFunction(() => { putMethod(value.id as number, value.name, false) },
                     () => { editTodoLocal(value.name, value.name, false) });
                 (check.parentElement as HTMLElement).style.textDecoration = "none"
             }
@@ -73,7 +67,7 @@ function setTaskToList(event : Event) {
 
 async function handlePageRefresh() {
     lsGet = localStorage.getItem("storage") as string;
-    let tasks = (lsGet === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
+    const tasks : valueObjectType[] = (lsGet === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
     tasks.map((task : valueObjectType) => prepareTask(task))
     store.innerText = lsGet
 }
@@ -97,10 +91,12 @@ async function clearAllTasks() {
             () => { deleteAllLocal(), taskContainer.innerHTML = "" })
 }
 
-function actualExecutionFunction(callback1 : Function, callback2 : Function) {
+function actualExecutionFunction(callback1 : Function, callback2 : Function) : void {
     localStorage.getItem("storage") === "CloudStorage" ? callback1() : callback2()
 }
 
 (document.querySelector("form") as HTMLFormElement).addEventListener("submit", setTaskToList);
 store.addEventListener("click", switchBetweenStorage);
 (document.querySelector(".all-clear") as HTMLButtonElement).addEventListener("click", clearAllTasks)
+
+export { appController, valueObjectType }

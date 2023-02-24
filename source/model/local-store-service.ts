@@ -1,29 +1,23 @@
-import { TodoItem } from "../utils/todo-item.js"
-
-interface valueObjectType{
-    name : string,
-    isCompleted : boolean,
-    id? : number
-}
+import { TodoItem, valueObjectType } from "../utils/todo-item.js"
 
 export function localStore() {
     return {
 
         createTodoLocal : function (value : string) {
-            const existingList : valueObjectType[] = getTodoLocal()
+            const existingList = getTodoLocal()
             existingList.push(new TodoItem(value))
             setTodoLocal(existingList)
         },
 
         editTodoLocal : function (previousValue : string, newValue : string, isCompleted = false) {
-            const existingList : valueObjectType[] = getTodoLocal()
+            const existingList = getTodoLocal()
             existingList.splice(existingList.indexOf(returnRequiredObject(previousValue,existingList)),
             1, new TodoItem(newValue,isCompleted))
             setTodoLocal(existingList)
         },
 
         deleteTodoLocal : function (value : string) {
-            const existingList : valueObjectType[] = getTodoLocal()
+            const existingList = getTodoLocal()
             existingList.splice(existingList.indexOf(returnRequiredObject(value,existingList)), 1)
             setTodoLocal(existingList)
         },
@@ -49,5 +43,3 @@ function returnRequiredObject(value : string, existingList : valueObjectType[]) 
         return elem; 
     }  
 }
-
-console.log(getTodoLocal())

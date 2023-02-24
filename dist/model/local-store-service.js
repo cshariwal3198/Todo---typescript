@@ -33,4 +33,3 @@ function returnRequiredObject(value, existingList) {
             return elem;
     }
 }
-console.log(getTodoLocal());

@@ -1,4 +1,4 @@
-import { TodoItem } from "../utils/todo-item.js"
+import { TodoItem, valueObjectType } from "../utils/todo-item.js"
 
 const todoApiURL = "https://mk-todo-web-api.azurewebsites.net/api/ChethanTodoItems"
 const deleteApiURL = "https://mk-todo-web-api.azurewebsites.net/ChethanTodoItems/deleteAll"
@@ -11,7 +11,7 @@ class OptionObject{
     method;
     body;
     headers;
-    constructor(method : string, body? : {name: string, isCompleted? : boolean, index? : number}, header? : {"Content-type" : string} ){
+    constructor(method : string, body? : valueObjectType, header? : {"Content-type" : string} ){
         this.method = method;
         this.body = JSON.stringify(body);
         this.headers = header
@@ -20,11 +20,11 @@ class OptionObject{
 
 function cloudStore(){
     return {
-        getTodoCloud : async function(){
+        getTodoCloud : async function() {
             return (await fetch(todoApiURL)).json()
         },
 
-        postMethod : async function(value : string){
+        postMethod : async function(value : string) {
             return (await setTodoCloud(todoApiURL,new OptionObject("POST",
                 new TodoItem(value,false,0),optionHeader))).json()
         },
@@ -53,6 +53,4 @@ async function setTodoCloud (apiURL : string, options : Object) : Promise<any>{
 }
 
 
-// console.log(cloudStore().getTodoCloud())
-// cloudStore().postMethod("place")
 export  { cloudStore }
