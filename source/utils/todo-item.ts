@@ -11,10 +11,14 @@ class TodoItem{
     }
 }
 
-interface valueObjectType{
+interface IvalueObjectType{
     name : string,
     isCompleted? : boolean,
     id? : number
 }
 
-export { TodoItem, valueObjectType }
+type OptionType = {
+    [key : string] : string
+}
+
+export { TodoItem, IvalueObjectType, OptionType }

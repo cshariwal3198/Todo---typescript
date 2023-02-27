@@ -21,26 +21,28 @@ function appController() {
             }, () => { deleteTodoLocal(value.name), taskContainer.removeChild(parentElement); });
         },
         editSelectedTask: function (editButton, span, index) {
-            if (editButton.innerText === "Edit") {
+            if (editButton.innerText === 'Edit') {
                 previousSpanValue = span.innerText;
                 span.contentEditable = `${true}`;
                 span.focus();
-                editButton.innerText = "Save";
+                editButton.innerText = 'Save';
             }
             else {
-                editButton.innerText = "Edit";
+                editButton.innerText = 'Edit';
                 span.contentEditable = `${false}`;
                 actualExecutionFunction(() => { putMethod(index, span.innerText); }, () => { editTodoLocal(previousSpanValue, span.innerText); });
             }
         },
-        varifyCheck: async function (check, value) {
-            if (check.checked === true) {
+        adjustCheckValue: async function (check, value) {
+            if (check.checked) {
                 actualExecutionFunction(() => { putMethod(value.id, value.name, true); }, () => { editTodoLocal(value.name, value.name, true); });
-                check.parentElement.style.textDecoration = "line-through";
+                (check.parentElement?.firstChild).style.textDecoration = "line-through";
+                (check.parentElement?.children[3]).disabled = true;
             }
             else {
                 actualExecutionFunction(() => { putMethod(value.id, value.name, false); }, () => { editTodoLocal(value.name, value.name, false); });
-                check.parentElement.style.textDecoration = "none";
+                (check.parentElement?.firstChild).style.textDecoration = "none";
+                (check.parentElement?.children[3]).disabled = false;
             }
         }
     };

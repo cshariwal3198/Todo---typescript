@@ -7,7 +7,7 @@ const optionHeader = {
 class OptionObject {
     constructor(method, body, header) {
         this.method = method;
-        this.body = JSON.stringify(body);
+        this.body = body && JSON.stringify(body);
         this.headers = header;
     }
 }

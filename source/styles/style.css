@@ -18,10 +18,6 @@ form input[type="text"] {
     font-weight: 400;
     font-family: cursive;
     background-color: rgb(202, 224, 224);
-    background-image: url("https://images.unsplash.com/photo-1507090960745-b32f65d3113a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGhvcml6b250YWwlMjB3YWxscGFwZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60");
-    background-repeat: no-repeat;
-    background-position-x: right;
-    background-size: 130px;
 }
 .div-to-display {
     display: flex;

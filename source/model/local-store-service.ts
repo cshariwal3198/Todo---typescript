@@ -1,45 +1,45 @@
-import { TodoItem, valueObjectType } from "../utils/todo-item.js"
+import { TodoItem, IvalueObjectType } from "../utils/todo-item.js"
 
 export function localStore() {
     return {
 
-        createTodoLocal : function (value : string) {
+        createTodoLocal: function (value: string) {
             const existingList = getTodoLocal()
             existingList.push(new TodoItem(value))
             setTodoLocal(existingList)
         },
 
-        editTodoLocal : function (previousValue : string, newValue : string, isCompleted = false) {
+        editTodoLocal: function (previousValue: string, newValue: string, isCompleted? : boolean) {
             const existingList = getTodoLocal()
-            existingList.splice(existingList.indexOf(returnRequiredObject(previousValue,existingList)),
-            1, new TodoItem(newValue,isCompleted))
+            existingList.splice(existingList.indexOf(returnRequiredObject(previousValue, existingList)),
+                1, new TodoItem(newValue, isCompleted))
             setTodoLocal(existingList)
         },
 
-        deleteTodoLocal : function (value : string) {
+        deleteTodoLocal: function (value: string) {
             const existingList = getTodoLocal()
-            existingList.splice(existingList.indexOf(returnRequiredObject(value,existingList)), 1)
+            existingList.splice(existingList.indexOf(returnRequiredObject(value, existingList)), 1)
             setTodoLocal(existingList)
         },
-
-        deleteAllLocal : function () {
+ 
+        deleteAllLocal: function () {
             setTodoLocal([])
         }
 
     }
 }
 
-export function getTodoLocal() : valueObjectType[] {
+export function getTodoLocal(): IvalueObjectType[] {
     return JSON.parse(`${localStorage.getItem("todo") || []}`)
 }
 
-function setTodoLocal (taskValue : valueObjectType[]) {
+function setTodoLocal(taskValue: IvalueObjectType[]) {
     localStorage.setItem("todo", JSON.stringify(taskValue))
 }
 
-function returnRequiredObject(value : string, existingList : valueObjectType[]) : valueObjectType {
-    for(let elem of existingList){
-        if(elem.name === value)
-        return elem; 
-    }  
+function returnRequiredObject(value: string, existingList: IvalueObjectType[]): IvalueObjectType{
+    for (let elem of existingList) {
+        if (elem.name === value)
+            return elem;
+    }
 }

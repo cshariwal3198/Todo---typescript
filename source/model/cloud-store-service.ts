@@ -1,9 +1,9 @@
-import { TodoItem, valueObjectType } from "../utils/todo-item.js"
+import { TodoItem, IvalueObjectType, OptionType } from "../utils/todo-item.js"
 
 const todoApiURL = "https://mk-todo-web-api.azurewebsites.net/api/ChethanTodoItems"
 const deleteApiURL = "https://mk-todo-web-api.azurewebsites.net/ChethanTodoItems/deleteAll"
 
-const optionHeader = {
+const optionHeader : OptionType = {
     "Content-type": "application/json",
 }
 
@@ -11,10 +11,10 @@ class OptionObject{
     method;
     body;
     headers;
-    constructor(method : string, body? : valueObjectType, header? : {"Content-type" : string} ){
+    constructor( method : string, body? : IvalueObjectType, header? : OptionType ){
         this.method = method;
-        this.body = JSON.stringify(body);
-        this.headers = header
+        this.body = body && JSON.stringify(body);
+        this.headers = header;
     }
 }
 
@@ -51,6 +51,5 @@ async function setTodoCloud (apiURL : string, options : Object) : Promise<any>{
         console.log("Something went wrong...!!")
     }
 }
-
 
 export  { cloudStore }
