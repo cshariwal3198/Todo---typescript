@@ -34,7 +34,7 @@ function view(){
 
 
 function createNewElement(elementName : string, text?: string) : HTMLElement{
-    const newElement = document.createElement(elementName) as HTMLElement
+    const newElement = document.createElement(elementName)
     text && (newElement.innerText = text)
     return newElement
 }

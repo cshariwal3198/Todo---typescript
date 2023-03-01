@@ -6,9 +6,9 @@ import { TodoItem, IvalueObjectType } from "../utils/todo-item.js";
 const taskInput = document.querySelector(".form-input") as HTMLInputElement
 const taskContainer = document.querySelector(".div-to-display") as HTMLDivElement
 const store = document.querySelector(".storage") as HTMLButtonElement
-let previousSpanValue : string = ""
- 
-let lsGet : string;
+let previousSpanValue: string;
+
+let defaultStorageLocation: string;
 localStorage.setItem("storage", localStorage.getItem("storage") || "CloudStorage")
 
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore()
@@ -27,11 +27,11 @@ function appController() {
         },
 
         editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index: number) {
-            if (editButton.innerText === 'Edit') {
+            if (editButton.innerText === 'Edi t') {
                 previousSpanValue = span.innerText
                 span.contentEditable = `${true}`
                 span.focus()
-                editButton.innerText = 'Save'
+                editButton.innerText = 'Sa ve'
             } else {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
@@ -52,7 +52,6 @@ function appController() {
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = "none";
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = false
             }
-
         }
     }
 }
@@ -67,26 +66,26 @@ function setTaskToList(event: Event) {
 }
 
 async function handlePageRefresh() {
-    lsGet = localStorage.getItem("storage") as string;
-    const tasks: IvalueObjectType[] = (lsGet === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
+    defaultStorageLocation = localStorage.getItem("storage") as string;
+    const tasks = (defaultStorageLocation === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
     tasks.map((task: IvalueObjectType) => prepareTask(task))
-    store.innerText = lsGet
+    store.innerText = defaultStorageLocation
 }
 
 function switchBetweenStorage() {
-    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
+    if (confirm(`You a re switching your default Storage. Press Ok to proceed`)) {
         actualExecutionFunction(() => { localStorage.setItem("storage", "LocalStorage") },
             () => { localStorage.setItem("storage", "CloudStorage") })
         taskContainer.innerHTML = ""
         handlePageRefresh();
-        store.innerText = lsGet;
+        store.innerText = defaultStorageLocation;
     }
 }
 
 async function clearAllTasks() {
-    confirm("Your all tasks will be erased, Continue ?") &&
+    confirm("Your all  tasks will be erased, Continue ?") &&
         actualExecutionFunction(async () => {
-            let deleteResponse = await deleteAllCloud()
+            const deleteResponse = await deleteAllCloud()
             deleteResponse.status === 200 && (taskContainer.innerHTML = "")
         },
             () => { deleteAllLocal(), taskContainer.innerHTML = "" })
