@@ -6,7 +6,7 @@ import { TodoItem, IvalueObjectType } from "../utils/todo-item.js";
 const taskInput = document.querySelector(".form-input") as HTMLInputElement
 const taskContainer = document.querySelector(".div-to-display") as HTMLDivElement
 const store = document.querySelector(".storage") as HTMLButtonElement
-let previousSpanValue : string = ""
+let previousSpanValue : string ;
  
 let lsGet : string;
 localStorage.setItem("storage", localStorage.getItem("storage") || "CloudStorage")

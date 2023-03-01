@@ -34,7 +34,7 @@ function view(){
 
 
 function createNewElement(elementName : string, text?: string) : HTMLElement{
-    const newElement = document.createElement(elementName) as HTMLElement
+    const newElement = document.createElement(elementName)
     text && (newElement.innerText = text)
     return newElement
 }
@@ -43,20 +43,20 @@ function appendElementToParent(parent : HTMLElement, child : HTMLElement) : void
     parent.appendChild(child)
 }
 
-function createEditButton(event : string, span : HTMLSpanElement, value : IvalueObjectType) : HTMLElement{
+function createEditButton(event : string, span : HTMLSpanElement, value : IvalueObjectType) : HTMLButtonElement{
     const editButton = createNewElement("button","Edit") as HTMLButtonElement
     value.isCompleted && (editButton.disabled = true)
     editButton.addEventListener(event, ()=>editSelectedTask(editButton,span,value.id as number))
     return editButton;
 }
 
-function createDeleteButton(event : string, value : IvalueObjectType) : HTMLElement{
+function createDeleteButton(event : string, value : IvalueObjectType) : HTMLButtonElement{
     const deleteButton = createNewElement("button","X") as HTMLButtonElement
     deleteButton.addEventListener(event, ()=>deleteSingleTask((deleteButton.parentNode as HTMLElement),value))
     return deleteButton;
 }
 
-function createCheckBoxElement(event : string, span : HTMLSpanElement, value : IvalueObjectType){
+function createCheckBoxElement(event : string, span : HTMLSpanElement, value : IvalueObjectType) : HTMLInputElement{
     const check = createNewElement("input") as HTMLInputElement
     check.type = "checkbox"
     value.isCompleted && (check.checked = true, span.style.textDecoration = "line-through")

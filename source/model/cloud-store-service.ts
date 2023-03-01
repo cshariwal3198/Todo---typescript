@@ -13,7 +13,7 @@ class OptionObject{
     headers;
     constructor( method : string, body? : IvalueObjectType, header? : OptionType ){
         this.method = method;
-        this.body = body && JSON.stringify(body);
+        this.body = JSON.stringify(body);
         this.headers = header;
     }
 }
@@ -26,12 +26,12 @@ function cloudStore(){
 
         postMethod : async function(value : string) {
             return (await setTodoCloud(todoApiURL,new OptionObject("POST",
-                new TodoItem(value,false,0),optionHeader))).json()
+                new TodoItem(value),optionHeader))).json()
         },
 
-        putMethod : function (index : number, editedValue : string, isComplete : boolean = false) {
+        putMethod : function (index : number, editedValue : string, isCompleted : boolean = false) {
             return setTodoCloud(`${todoApiURL}/${index}`,
-                new OptionObject("PUT",new TodoItem(editedValue,isComplete,index),optionHeader))
+                new OptionObject("PUT",new TodoItem(editedValue,isCompleted,index),optionHeader))
         },
         
         deleteMethodCloud : async function (index : number) {
@@ -44,11 +44,11 @@ function cloudStore(){
     }
 }
 
-async function setTodoCloud (apiURL : string, options : Object) : Promise<any>{
+async function setTodoCloud (apiURL : string, options : OptionObject) : Promise<any>{
     try {
         return await fetch(apiURL, options)
     } catch (error) {
-        console.log("Something went wrong...!!")
+        console.log("Something went wrong...!!!")
     }
 }
 

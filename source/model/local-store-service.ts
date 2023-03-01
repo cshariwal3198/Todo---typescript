@@ -38,8 +38,8 @@ function setTodoLocal(taskValue: IvalueObjectType[]) {
 }
 
 function returnRequiredObject(value: string, existingList: IvalueObjectType[]): IvalueObjectType{
-    for (let elem of existingList) {
-        if (elem.name === value)
-            return elem;
+    for (let task of existingList) {
+        if (task.name === value)
+            return task;
     }
 }
