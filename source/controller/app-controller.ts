@@ -21,33 +21,33 @@ function appController() {
     return {
         deleteSingleTask: function (parentElement: HTMLElement, value: IvalueObjectType) {
             actualExecutionFunction(async () => {
-                const result = await deleteMethodCloud(value.id as number)
+                const result = await deleteMethodCloud(value.id)
                 result.status === 204 && taskContainer.removeChild(parentElement)
             }, () => { deleteTodoLocal(value.name), taskContainer.removeChild(parentElement) })
         },
 
         editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index: number) {
-            if (editButton.innerText === 'Edi t') {
+            if (editButton.innerText === 'Edit') {
                 previousSpanValue = span.innerText
                 span.contentEditable = `${true}`
                 span.focus()
-                editButton.innerText = 'Sa ve'
+                editButton.innerText = 'Save'
             } else {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
-                actualExecutionFunction(() => { putMethod(index, span.innerText) },
+                actualExecutionFunction(() => { putMethod(span.innerText,false, index) },
                     () => { editTodoLocal(previousSpanValue, span.innerText) })
             }
         },
 
         adjustCheckValue: async function (check: HTMLInputElement, value: IvalueObjectType) {
             if (check.checked) {
-                actualExecutionFunction(() => { putMethod(value.id as number, value.name, true) },
+                actualExecutionFunction(() => { putMethod(value.name, true, value.id) },
                     () => { editTodoLocal(value.name, value.name, true) });
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = "line-through";
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = true
             } else {
-                actualExecutionFunction(() => { putMethod(value.id as number, value.name, false) },
+                actualExecutionFunction(() => { putMethod(value.name, false, value.id) },
                     () => { editTodoLocal(value.name, value.name, false) });
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = "none";
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = false
@@ -73,7 +73,7 @@ async function handlePageRefresh() {
 }
 
 function switchBetweenStorage() {
-    if (confirm(`You a re switching your default Storage. Press Ok to proceed`)) {
+    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
         actualExecutionFunction(() => { localStorage.setItem("storage", "LocalStorage") },
             () => { localStorage.setItem("storage", "CloudStorage") })
         taskContainer.innerHTML = ""
@@ -83,7 +83,7 @@ function switchBetweenStorage() {
 }
 
 async function clearAllTasks() {
-    confirm("Your all  tasks will be erased, Continue ?") &&
+    confirm("Your all tasks will be erased, Continue ?") &&
         actualExecutionFunction(async () => {
             const deleteResponse = await deleteAllCloud()
             deleteResponse.status === 200 && (taskContainer.innerHTML = "")

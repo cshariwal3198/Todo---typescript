@@ -29,12 +29,12 @@ function cloudStore(){
                 new TodoItem(value,false,0),optionHeader))).json()
         },
 
-        putMethod : function (index : number, editedValue : string, isComplete : boolean = false) {
+        putMethod : function ( editedValue : string, isComplete : boolean = false, index? : number) {
             return setTodoCloud(`${todoApiURL}/${index}`,
                 new OptionObject("PUT",new TodoItem(editedValue,isComplete,index),optionHeader))
         },
         
-        deleteMethodCloud : async function (index : number) {
+        deleteMethodCloud : async function (index? : number) {
             return await setTodoCloud(`${todoApiURL}/${index}`, new OptionObject("DELETE"))
         },
 
