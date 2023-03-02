@@ -17,8 +17,8 @@ interface IvalueObjectType{
     id? : number
 }
 
-type OptionType = {
+type OptionHeaderType = {
     [key : string] : string
 }
 
-export { TodoItem, IvalueObjectType, OptionType }
+export { TodoItem, IvalueObjectType, OptionHeaderType }
