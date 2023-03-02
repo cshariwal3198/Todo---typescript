@@ -18,6 +18,8 @@ class OptionObject {
     }
 }
 
+//rectify
+
 function cloudStore(){
     return {
         getTodoCloud : async function() {
