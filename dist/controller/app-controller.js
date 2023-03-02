@@ -6,7 +6,11 @@ const taskInput = document.querySelector(".form-input");
 const taskContainer = document.querySelector(".div-to-display");
 const store = document.querySelector(".storage");
 let previousSpanValue;
+<<<<<<< HEAD
 let defaultStorageLocation;
+=======
+let lsGet;
+>>>>>>> view-model-controller-branch
 localStorage.setItem("storage", localStorage.getItem("storage") || "CloudStorage");
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore();
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore();

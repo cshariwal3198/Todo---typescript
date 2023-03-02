@@ -7,7 +7,7 @@ const optionHeader = {
 class OptionObject {
     constructor(method, body, header) {
         this.method = method;
-        this.body = body && JSON.stringify(body);
+        this.body = JSON.stringify(body);
         this.headers = header;
     }
 }
@@ -17,10 +17,10 @@ function cloudStore() {
             return (await fetch(todoApiURL)).json();
         },
         postMethod: async function (value) {
-            return (await setTodoCloud(todoApiURL, new OptionObject("POST", new TodoItem(value, false, 0), optionHeader))).json();
+            return (await setTodoCloud(todoApiURL, new OptionObject("POST", new TodoItem(value), optionHeader))).json();
         },
-        putMethod: function (index, editedValue, isComplete = false) {
-            return setTodoCloud(`${todoApiURL}/${index}`, new OptionObject("PUT", new TodoItem(editedValue, isComplete, index), optionHeader));
+        putMethod: function (index, editedValue, isCompleted = false) {
+            return setTodoCloud(`${todoApiURL}/${index}`, new OptionObject("PUT", new TodoItem(editedValue, isCompleted, index), optionHeader));
         },
         deleteMethodCloud: async function (index) {
             return await setTodoCloud(`${todoApiURL}/${index}`, new OptionObject("DELETE"));
@@ -35,7 +35,7 @@ async function setTodoCloud(apiURL, options) {
         return await fetch(apiURL, options);
     }
     catch (error) {
-        console.log("Something went wrong...!!");
+        console.log("Something went wrong...!!!");
     }
 }
 export { cloudStore };

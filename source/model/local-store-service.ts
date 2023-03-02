@@ -1,4 +1,4 @@
-import { TodoItem, IvalueObjectType } from "../utils/todo-item.js"
+import { TodoItem, IvalueObjectType } from '../utils/todo-item.js'
 
 export function localStore() {
     return {
@@ -30,16 +30,17 @@ export function localStore() {
 }
 
 export function getTodoLocal(): IvalueObjectType[] {
-    return JSON.parse(`${localStorage.getItem("todo") || []}`)
+    return JSON.parse(`${localStorage.getItem('todo') || []}`)
 }
 
 function setTodoLocal(taskValue: IvalueObjectType[]) {
-    localStorage.setItem("todo", JSON.stringify(taskValue))
+    localStorage.setItem('todo', JSON.stringify(taskValue))
 }
 
 function returnRequiredObject(value: string, existingList: IvalueObjectType[]): IvalueObjectType{
-    for (let elem of existingList) {
-        if (elem.name === value)
-            return elem;
+    for (let task of existingList) {
+        if (task.name === value)
+            return task;
     }
 }
+
