@@ -8,7 +8,7 @@ const taskContainer = document.querySelector(".div-to-display") as HTMLDivElemen
 const store = document.querySelector(".storage") as HTMLButtonElement
 let previousSpanValue : string = ""
  
-let lsGet : string;
+let defaultStorageLocation : string;
 localStorage.setItem("storage", localStorage.getItem("storage") || "CloudStorage")
 
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore()
@@ -68,8 +68,8 @@ function setTaskToList(event: Event) {
 }
 
 async function handlePageRefresh() {
-    lsGet = localStorage.getItem("storage") as string;
-    const tasks: IvalueObjectType[] = (lsGet === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
+    defaultStorageLocation = localStorage.getItem("storage") as string;
+    const tasks: IvalueObjectType[] = (defaultStorageLocation === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
     tasks.map((task: IvalueObjectType) => prepareTask(task))
     store.innerText = defaultStorageLocation
 }
