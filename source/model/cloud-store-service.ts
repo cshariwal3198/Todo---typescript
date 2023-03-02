@@ -35,6 +35,7 @@ function cloudStore(){
         },
         
         deleteMethodCloud : async function (index : number) {
+            index++
             return await setTodoCloud(`${todoApiURL}/${index}`, new OptionObject('DELETE'))
         },
 
