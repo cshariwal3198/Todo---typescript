@@ -52,4 +52,6 @@ async function setTodoCloud (apiURL : string, options : Object) : Promise<any>{
     }
 }
 
+// test line in removing-type-assertions branch
+
 export  { cloudStore }
