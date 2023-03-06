@@ -34,19 +34,19 @@ function appController() {
             else {
                 editButton.innerText = 'Edit';
                 span.contentEditable = `${false}`;
-                const put = () => { putMethod(index, span.innerText); };
-                const edit = () => { editTodoLocal(previousSpanValue, span.innerText); };
-                actualExecutionFunction(put, edit);
+                // const put = () => { putMethod(index, span.innerText) }
+                // const edit = () => { editTodoLocal(previousSpanValue, span.innerText) }
+                actualExecutionFunction(putMethod.prototype.bind(index, span.innerText), editTodoLocal.bind(previousSpanValue, span.innerText));
             }
         },
-        adjustCheckValue: function (check, value) {
+        adjustCheckValue: function (check, { id, name }) {
             if (check.checked) {
-                actualExecutionFunction(putMethod(value.id, value.name, true), editTodoLocal(value.name, value.name, true));
+                actualExecutionFunction(putMethod.prototype.bind(id, name, true), editTodoLocal.prototype.bind(name, name, true));
                 (check.parentElement?.firstChild).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3]).disabled = true;
             }
             else {
-                actualExecutionFunction(putMethod(value.id, value.name, false), editTodoLocal(value.name, value.name, false));
+                actualExecutionFunction(putMethod.prototype.bind(id, name, false), editTodoLocal.prototype.bind(name, name, false));
                 (check.parentElement?.firstChild).style.textDecoration = 'none';
                 (check.parentElement?.children[3]).disabled = false;
             }
