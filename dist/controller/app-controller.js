@@ -34,19 +34,23 @@ function appController() {
             else {
                 editButton.innerText = 'Edit';
                 span.contentEditable = `${false}`;
-                // const put = () => { putMethod(index, span.innerText) }
-                // const edit = () => { editTodoLocal(previousSpanValue, span.innerText) }
-                actualExecutionFunction(putMethod.prototype.bind(index, span.innerText), editTodoLocal.bind(previousSpanValue, span.innerText));
+                const putCloud = function () {
+                    const result = putMethod(index, span.innerText);
+                    if (!result) {
+                        span.innerText = previousSpanValue;
+                    }
+                };
+                actualExecutionFunction(putCloud, editTodoLocal.bind(previousSpanValue, span.innerText));
             }
         },
         adjustCheckValue: function (check, { id, name }) {
             if (check.checked) {
-                actualExecutionFunction(putMethod.prototype.bind(id, name, true), editTodoLocal.prototype.bind(name, name, true));
+                lsGet === "CloudStorage" && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
                 (check.parentElement?.firstChild).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3]).disabled = true;
             }
             else {
-                actualExecutionFunction(putMethod.prototype.bind(id, name, false), editTodoLocal.prototype.bind(name, name, false));
+                lsGet === "CloudStorage" && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 (check.parentElement?.firstChild).style.textDecoration = 'none';
                 (check.parentElement?.children[3]).disabled = false;
             }

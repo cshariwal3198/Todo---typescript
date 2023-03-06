@@ -39,19 +39,23 @@ function appController() {
             } else {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
-                // const put = () => { putMethod(index, span.innerText) }
-                // const edit = () => { editTodoLocal(previousSpanValue, span.innerText) }
-                actualExecutionFunction(putMethod.prototype.bind(index, span.innerText), editTodoLocal.bind(previousSpanValue, span.innerText))
+                const putCloud = function(){
+                    const result = putMethod(index, span.innerText)
+                    if(!result){
+                        span.innerText = previousSpanValue
+                    }
+                }
+                actualExecutionFunction(putCloud, editTodoLocal.bind(previousSpanValue, span.innerText))
             }
         },
 
-        adjustCheckValue: function (check: HTMLInputElement, {id, name}: IvalueObjectType) {
+        adjustCheckValue: function (check: HTMLInputElement, {id,name}: IvalueObjectType) {
             if (check.checked) {
-                actualExecutionFunction(putMethod.prototype.bind(id, name, true), editTodoLocal.prototype.bind(name, name, true));
+                lsGet === "CloudStorage" && id ? putMethod(id, name, true): editTodoLocal(name, name, true);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = true
             } else {
-                actualExecutionFunction(putMethod.prototype.bind(id, name, false), editTodoLocal.prototype.bind(name, name, false));
+                lsGet === "CloudStorage" && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'none';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = false
             }
