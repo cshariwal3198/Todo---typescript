@@ -18,8 +18,6 @@ class OptionObject {
     }
 }
 
-//rectify
-
 function cloudStore(){
     return {
         getTodoCloud : async function() {
@@ -27,18 +25,20 @@ function cloudStore(){
         },
 
         postMethod : async function(value : string) {
+            // let postResult = await setTodoCloud(todoApiURL, new OptionObject('POST',  new TodoItem(value),optionHeader))
+            // return postResult?.json()
+
             return (await setTodoCloud(todoApiURL,new OptionObject('POST',
                 new TodoItem(value),optionHeader))).json()
         },
 
-        putMethod : function (index : number, editedValue : string, isCompleted : boolean = false) {
-            return setTodoCloud(`${todoApiURL}/${index}`,
+        putMethod : async function (index : number, editedValue : string, isCompleted : boolean = false) {
+            return await setTodoCloud(`${todoApiURL}/${index}`,
                 new OptionObject('PUT',new TodoItem(editedValue,isCompleted,index),optionHeader))
         },
         
         deleteMethodCloud : async function (index : number) {
-            index++
-            return await setTodoCloud(`${todoApiURL}/${index}`, new OptionObject('DELETE'))
+            return setTodoCloud(`${todoApiURL}/${index}`, new OptionObject('DELETE'))
         },
 
         deleteAllCloud : async function () {
@@ -47,12 +47,14 @@ function cloudStore(){
     }
 }
 
-async function setTodoCloud (apiURL : string, options : OptionObject) : Promise<any>{
-    try {
-        return await fetch(apiURL, options)
-    } catch (error) {
-        console.log('Something went wrong...!!!')
-    }
+async function setTodoCloud (apiURL : string, options : OptionObject){
+    // try {
+    //     return await fetch(apiURL, options)
+    // } catch (error) {
+    //     console.log('Something went wrong...!!!')
+    // }
+
+    return await fetch(apiURL, options)
 }
 
 export  { cloudStore }

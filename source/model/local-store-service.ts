@@ -42,4 +42,3 @@ function returnRequiredObject(value: string, existingList: IvalueObjectType[]): 
         if(task.name === value) return task;
     }
 }
-
