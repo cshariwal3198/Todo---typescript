@@ -1,16 +1,12 @@
-import { view } from "../view/view.js";
-import { cloudStore } from "../model/cloud-store-service.js";
-import { localStore, getTodoLocal } from "../model/local-store-service.js";
-import { TodoItem } from "../utils/todo-item.js";
+import { view } from '../view/view.js';
+import { cloudStore } from '../model/cloud-store-service.js';
+import { localStore, getTodoLocal } from '../model/local-store-service.js';
+import { TodoItem } from '../utils/todo-item.js';
 const taskInput = document.querySelector(".form-input");
 const taskContainer = document.querySelector(".div-to-display");
 const store = document.querySelector(".storage");
-let previousSpanValue;
-<<<<<<< HEAD
+let previousSpanValue = "";
 let defaultStorageLocation;
-=======
-let lsGet;
->>>>>>> view-model-controller-branch
 localStorage.setItem("storage", localStorage.getItem("storage") || "CloudStorage");
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore();
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore();
@@ -26,11 +22,11 @@ function appController() {
             }, () => { deleteTodoLocal(value.name), taskContainer.removeChild(parentElement); });
         },
         editSelectedTask: function (editButton, span, index) {
-            if (editButton.innerText === 'Edi t') {
+            if (editButton.innerText === 'Edit') {
                 previousSpanValue = span.innerText;
                 span.contentEditable = `${true}`;
                 span.focus();
-                editButton.innerText = 'Sa ve';
+                editButton.innerText = 'Save';
             }
             else {
                 editButton.innerText = 'Edit';
@@ -41,12 +37,12 @@ function appController() {
         adjustCheckValue: async function (check, value) {
             if (check.checked) {
                 actualExecutionFunction(() => { putMethod(value.id, value.name, true); }, () => { editTodoLocal(value.name, value.name, true); });
-                (check.parentElement?.firstChild).style.textDecoration = "line-through";
+                (check.parentElement?.firstChild).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3]).disabled = true;
             }
             else {
                 actualExecutionFunction(() => { putMethod(value.id, value.name, false); }, () => { editTodoLocal(value.name, value.name, false); });
-                (check.parentElement?.firstChild).style.textDecoration = "none";
+                (check.parentElement?.firstChild).style.textDecoration = 'none';
                 (check.parentElement?.children[3]).disabled = false;
             }
         }
@@ -67,7 +63,7 @@ async function handlePageRefresh() {
     store.innerText = defaultStorageLocation;
 }
 function switchBetweenStorage() {
-    if (confirm(`You a re switching your default Storage. Press Ok to proceed`)) {
+    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
         actualExecutionFunction(() => { localStorage.setItem("storage", "LocalStorage"); }, () => { localStorage.setItem("storage", "CloudStorage"); });
         taskContainer.innerHTML = "";
         handlePageRefresh();
@@ -75,16 +71,16 @@ function switchBetweenStorage() {
     }
 }
 async function clearAllTasks() {
-    confirm("Your all  tasks will be erased, Continue ?") &&
+    confirm("Your all tasks will be erased, Continue ?") &&
         actualExecutionFunction(async () => {
-            const deleteResponse = await deleteAllCloud();
+            let deleteResponse = await deleteAllCloud();
             deleteResponse.status === 200 && (taskContainer.innerHTML = "");
         }, () => { deleteAllLocal(), taskContainer.innerHTML = ""; });
 }
 function actualExecutionFunction(callback1, callback2) {
-    localStorage.getItem("storage") === "CloudStorage" ? callback1() : callback2();
+    localStorage.getItem('storage') === 'CloudStorage' ? callback1() : callback2();
 }
-document.querySelector("form").addEventListener("submit", setTaskToList);
-store.addEventListener("click", switchBetweenStorage);
-document.querySelector(".all-clear").addEventListener("click", clearAllTasks);
+document.querySelector('form').addEventListener('submit', setTaskToList);
+store.addEventListener('click', switchBetweenStorage);
+document.querySelector('.all-clear').addEventListener('click', clearAllTasks);
 export { appController };

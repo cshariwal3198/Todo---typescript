@@ -34,11 +34,7 @@ function view(){
 
 
 function createNewElement(elementName : string, text?: string) : HTMLElement{
-<<<<<<< HEAD
-    const newElement = document.createElement(elementName)
-=======
     const newElement = document.createElement(elementName)  
->>>>>>> view-model-controller-branch
     text && (newElement.innerText = text)
     return newElement
 }
