@@ -29,11 +29,11 @@ function appController() {
         },
 
         editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index: number) {
-            if (editButton.innerText === 'Edi t') {
+            if (editButton.innerText === 'Edit') {
                 previousSpanValue = span.innerText
                 span.contentEditable = `${true}`
                 span.focus()
-                editButton.innerText = 'Sa ve'
+                editButton.innerText = 'Save'
             } else {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
