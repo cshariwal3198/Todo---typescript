@@ -15,6 +15,8 @@ const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud }
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore()
 const { showEmptyInputError, prepareTask } = view()
 
+// testline to check changes in master
+
 handlePageRefresh()
 
 function appController() {
