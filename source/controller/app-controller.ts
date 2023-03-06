@@ -3,13 +3,13 @@ import { cloudStore } from '../model/cloud-store-service.js';
 import { localStore, getTodoLocal } from '../model/local-store-service.js';
 import { TodoItem, IvalueObjectType } from '../utils/todo-item.js';
 
-const taskInput = document.querySelector(".form-input") as HTMLInputElement
-const taskContainer = document.querySelector(".div-to-display") as HTMLDivElement
-const store = document.querySelector(".storage") as HTMLButtonElement
-let previousSpanValue : string = ""
+const taskInput = document.querySelector('.form-input') as HTMLInputElement
+const taskContainer = document.querySelector('.div-to-display') as HTMLDivElement
+const store = document.querySelector('.storage') as HTMLButtonElement
+let previousSpanValue : string = ''
  
 let defaultStorageLocation : string;
-localStorage.setItem("storage", localStorage.getItem("storage") || "CloudStorage")
+localStorage.setItem('storage', localStorage.getItem('storage') || 'CloudStorage')
 
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore()
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore()
@@ -68,29 +68,29 @@ function setTaskToList(event: Event) {
 }
 
 async function handlePageRefresh() {
-    defaultStorageLocation = localStorage.getItem("storage") as string;
-    const tasks: IvalueObjectType[] = (defaultStorageLocation === "CloudStorage") ? await getTodoCloud() : getTodoLocal()
+    defaultStorageLocation = localStorage.getItem('storage') as string;
+    const tasks: IvalueObjectType[] = (defaultStorageLocation === 'CloudStorage') ? await getTodoCloud() : getTodoLocal()
     tasks.map((task: IvalueObjectType) => prepareTask(task))
     store.innerText = defaultStorageLocation
 }
 
 function switchBetweenStorage() {
     if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
-        actualExecutionFunction(() => { localStorage.setItem("storage", "LocalStorage") },
-            () => { localStorage.setItem("storage", "CloudStorage") })
-        taskContainer.innerHTML = ""
+        actualExecutionFunction(() => { localStorage.setItem('storage', 'LocalStorage') },
+            () => { localStorage.setItem('storage', 'CloudStorage') })
+        taskContainer.innerHTML = ''
         handlePageRefresh();
         store.innerText = defaultStorageLocation;
     }
 }  
 
 async function clearAllTasks() {
-    confirm("Your all tasks will be erased, Continue ?") &&
+    confirm('Your all tasks will be erased, Continue ?') &&
         actualExecutionFunction(async () => {
             let deleteResponse = await deleteAllCloud()
-            deleteResponse.status === 200 && (taskContainer.innerHTML = "")
+            deleteResponse.status === 200 && (taskContainer.innerHTML = '')
         },
-            () => { deleteAllLocal(), taskContainer.innerHTML = "" })
+            () => { deleteAllLocal(), taskContainer.innerHTML = '' })
 }
 
 function actualExecutionFunction(callback1: Function, callback2: Function): void {
