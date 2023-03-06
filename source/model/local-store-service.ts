@@ -9,7 +9,7 @@ export function localStore() {
             setTodoLocal(existingList)
         },
 
-        editTodoLocal: function (previousValue: string, newValue: string, isCompleted? : boolean) {
+        editTodoLocal: function (previousValue: string, newValue: string, isCompleted?: boolean) {
             const existingList = getTodoLocal()
             existingList.splice(existingList.indexOf(returnRequiredObject(previousValue, existingList)),
                 1, new TodoItem(newValue, isCompleted))
@@ -21,7 +21,7 @@ export function localStore() {
             existingList.splice(existingList.indexOf(returnRequiredObject(value, existingList)), 1)
             setTodoLocal(existingList)
         },
- 
+
         deleteAllLocal: function () {
             setTodoLocal([])
         }
@@ -37,10 +37,9 @@ function setTodoLocal(taskValue: IvalueObjectType[]) {
     localStorage.setItem('todo', JSON.stringify(taskValue))
 }
 
-function returnRequiredObject(value: string, existingList: IvalueObjectType[]): IvalueObjectType{
+function returnRequiredObject(value: string, existingList: IvalueObjectType[]): IvalueObjectType {
     for (let task of existingList) {
-        if (task.name === value)
-            return task;
+        if(task.name === value) return task;
     }
 }
 
