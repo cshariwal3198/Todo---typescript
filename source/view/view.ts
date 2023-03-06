@@ -6,10 +6,11 @@ const inputError = document.querySelector('#error-div') as HTMLDivElement
 
 let { deleteSingleTask, editSelectedTask, adjustCheckValue } = appController()
 
+
 function view(){
     return {
 
-        prepareTask : function(value : IvalueObjectType) : void{
+        prepareTask : function(value : IvalueObjectType) : void {
             let paraBlock = createNewElement('p')
             let span = createNewElement('span',value.name)
             appendElementToParent(paraBlock,span)

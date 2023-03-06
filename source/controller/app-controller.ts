@@ -7,6 +7,8 @@ const taskInput = document.querySelector('.form-input') as HTMLInputElement
 const taskContainer = document.querySelector('.div-to-display') as HTMLDivElement
 const store = document.querySelector('.storage') as HTMLButtonElement
 let previousSpanValue : string ;
+
+// rectify branch for test.
  
 let lsGet : string;
 localStorage.setItem('storage', localStorage.getItem('storage') || 'CloudStorage')
