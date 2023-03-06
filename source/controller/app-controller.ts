@@ -3,6 +3,8 @@ import { cloudStore } from '../model/cloud-store-service.js';
 import { localStore, getTodoLocal } from '../model/local-store-service.js';
 import { TodoItem, IvalueObjectType } from '../utils/todo-item.js';
 
+// test push
+
 const taskInput = document.querySelector('.form-input') as HTMLInputElement
 const taskContainer = document.querySelector('.div-to-display') as HTMLDivElement
 const store = document.querySelector('.storage') as HTMLButtonElement
