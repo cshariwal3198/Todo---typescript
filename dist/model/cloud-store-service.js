@@ -23,7 +23,6 @@ function cloudStore() {
             return setTodoCloud(`${todoApiURL}/${index}`, new OptionObject('PUT', new TodoItem(editedValue, isCompleted, index), optionHeader));
         },
         deleteMethodCloud: async function (index) {
-            index++;
             return await setTodoCloud(`${todoApiURL}/${index}`, new OptionObject('DELETE'));
         },
         deleteAllCloud: async function () {
