@@ -38,9 +38,7 @@ function setTodoLocal(taskValue: IValueObjectType[]) {
 }
 
 function returnRequiredObject(value: string, existingList: IValueObjectType[]): IValueObjectType {
-    let t : IValueObjectType;
     existingList.forEach(task => {
-        if (task.name === value) t = task
+        if (task.name === value) return task
     })
-    return t
 }
