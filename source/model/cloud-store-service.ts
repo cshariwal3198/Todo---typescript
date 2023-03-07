@@ -1,4 +1,4 @@
-import { TodoItem, IvalueObjectType, OptionHeaderType } from '../utils/todo-item.js'
+import { TodoItem, IValueObjectType, OptionHeaderType } from '../utils/todo-item.js'
 
 const todoApiURL = 'https://mk-todo-web-api.azurewebsites.net/api/ChethanTodoItems'
 const deleteApiURL = 'https://mk-todo-web-api.azurewebsites.net/ChethanTodoItems/deleteAll'
@@ -11,7 +11,7 @@ class OptionObject {
     method;
     body;
     headers;
-    constructor( method : string, body? : IvalueObjectType, header? : OptionHeaderType ){
+    constructor( method : string, body? : IValueObjectType, header? : OptionHeaderType ){
         this.method = method;
         this.body = JSON.stringify(body);
         this.headers = header;
