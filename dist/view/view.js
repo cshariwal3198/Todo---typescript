@@ -44,6 +44,7 @@ function createEditButton(event, span, value) {
 function createDeleteButton(event, value) {
     const deleteButton = createNewElement('button', 'X');
     deleteButton.addEventListener(event, () => deleteSingleTask(deleteButton.parentNode, value));
+    // deleteButton.addEventListener(event, handleDeleteClick((deleteButton.parentNode as HTMLElement), value))
     return deleteButton;
 }
 function createCheckBoxElement(event, span, value) {
@@ -53,4 +54,7 @@ function createCheckBoxElement(event, span, value) {
     check.addEventListener(event, () => adjustCheckValue(check, value));
     return check;
 }
+// const handleDeleteClick = (parent : HTMLElement, value : IValueObjectType) => ()=> {
+//     deleteSingleTask(parent,value)
+// }
 export { view };

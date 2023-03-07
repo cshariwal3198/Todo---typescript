@@ -6,7 +6,7 @@ const taskInput = document.querySelector('.form-input');
 const taskContainer = document.querySelector('.div-to-display');
 const store = document.querySelector('.storage');
 let previousSpanValue;
-let lsGet;
+let defaultStorageLocation;
 localStorage.setItem('storage', localStorage.getItem('storage') || 'CloudStorage');
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore();
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore();
@@ -45,12 +45,12 @@ function appController() {
         },
         adjustCheckValue: function (check, { id, name }) {
             if (check.checked) {
-                lsGet === "CloudStorage" && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
+                defaultStorageLocation === "CloudStorage" && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
                 (check.parentElement?.firstChild).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3]).disabled = true;
             }
             else {
-                lsGet === "CloudStorage" && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
+                defaultStorageLocation === "CloudStorage" && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 (check.parentElement?.firstChild).style.textDecoration = 'none';
                 (check.parentElement?.children[3]).disabled = false;
             }
@@ -68,27 +68,27 @@ function setTaskToList(event) {
     showEmptyInputError() && actualExecutionFunction(addToCloud, addToLocal);
 }
 async function handlePageRefresh() {
-    lsGet = localStorage.getItem('storage');
-    const tasks = (lsGet === 'CloudStorage') ? await getTodoCloud() : getTodoLocal();
+    defaultStorageLocation = localStorage.getItem('storage');
+    const tasks = (defaultStorageLocation === 'CloudStorage') ? await getTodoCloud() : getTodoLocal();
     tasks.map((task) => prepareTask(task));
-    store.innerText = lsGet;
+    store.innerText = defaultStorageLocation;
 }
 function switchBetweenStorage() {
     if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
         actualExecutionFunction(() => { localStorage.setItem('storage', 'LocalStorage'); }, () => { localStorage.setItem('storage', 'CloudStorage'); });
         taskContainer.innerHTML = '';
         handlePageRefresh();
-        store.innerText = lsGet;
+        store.innerText = defaultStorageLocation;
     }
 }
 function clearAllTasks() {
     const eraseFromCloud = async () => {
-        let deleteResponse = await deleteAllCloud();
+        const deleteResponse = await deleteAllCloud();
         deleteResponse.status === 200 && (taskContainer.innerHTML = '');
     };
-    const eraseFromeLocal = () => { deleteAllLocal(), taskContainer.innerHTML = ''; };
+    const eraseFromLocal = () => { deleteAllLocal(), taskContainer.innerHTML = ''; };
     confirm('Your all tasks will be erased, Continue ?') &&
-        actualExecutionFunction(eraseFromCloud, eraseFromeLocal);
+        actualExecutionFunction(eraseFromCloud, eraseFromLocal);
 }
 function actualExecutionFunction(callback1, callback2) {
     localStorage.getItem('storage') === 'CloudStorage' ? callback1() : callback2();

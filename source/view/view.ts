@@ -7,21 +7,21 @@ const inputError = document.querySelector('#error-div') as HTMLDivElement
 let { deleteSingleTask, editSelectedTask, adjustCheckValue } = appController()
 
 
-function view(){
+function view() {
     return {
 
-        prepareTask : function(value : IValueObjectType) : void {
+        prepareTask: function (value: IValueObjectType): void {
             let paraBlock = createNewElement('p')
-            let span = createNewElement('span',value.name)
-            appendElementToParent(paraBlock,span)
-            appendElementToParent(paraBlock,createCheckBoxElement('change', span, value))
-            appendElementToParent(paraBlock,createDeleteButton('click', value))
-            appendElementToParent(paraBlock,createEditButton('click', span, value))
-            appendElementToParent(taskContainer,paraBlock)
+            let span = createNewElement('span', value.name)
+            appendElementToParent(paraBlock, span)
+            appendElementToParent(paraBlock, createCheckBoxElement('change', span, value))
+            appendElementToParent(paraBlock, createDeleteButton('click', value))
+            appendElementToParent(paraBlock, createEditButton('click', span, value))
+            appendElementToParent(taskContainer, paraBlock)
             taskInputBlock.value = ''
         },
 
-        showEmptyInputError: function () : boolean {
+        showEmptyInputError: function (): boolean {
             if (!taskInputBlock.value) {
                 inputError.innerHTML = '** please enter a task'
                 return false
@@ -34,30 +34,31 @@ function view(){
 }
 
 
-function createNewElement(elementName : string, text?: string) : HTMLElement{
-    const newElement = document.createElement(elementName)  
+function createNewElement(elementName: string, text?: string): HTMLElement {
+    const newElement = document.createElement(elementName)
     text && (newElement.innerText = text)
     return newElement
 }
 
-function appendElementToParent(parent : HTMLElement, child : HTMLElement) : void{
+function appendElementToParent(parent: HTMLElement, child: HTMLElement): void {
     parent.appendChild(child)
 }
 
-function createEditButton(event : string, span : HTMLSpanElement, value : IValueObjectType) : HTMLButtonElement{
-    const editButton = createNewElement('button','Edit') as HTMLButtonElement
+function createEditButton(event: string, span: HTMLSpanElement, value: IValueObjectType): HTMLButtonElement {
+    const editButton = createNewElement('button', 'Edit') as HTMLButtonElement
     value.isCompleted && (editButton.disabled = true)
-    editButton.addEventListener(event, ()=>editSelectedTask(editButton,span,value.id as number))
+    editButton.addEventListener(event, () => editSelectedTask(editButton, span, value.id as number))
     return editButton;
 }
 
-function createDeleteButton(event : string, value : IValueObjectType) : HTMLButtonElement{
-    const deleteButton = createNewElement('button','X') as HTMLButtonElement
-    deleteButton.addEventListener(event, ()=>deleteSingleTask((deleteButton.parentNode as HTMLElement),value))
+function createDeleteButton(event: string, value: IValueObjectType): HTMLButtonElement {
+    const deleteButton = createNewElement('button', 'X') as HTMLButtonElement
+    deleteButton.addEventListener(event, () => deleteSingleTask((deleteButton.parentNode as HTMLElement), value))
+    // deleteButton.addEventListener(event, handleDeleteClick((deleteButton.parentNode as HTMLElement), value))
     return deleteButton;
 }
 
-function createCheckBoxElement(event : string, span : HTMLSpanElement, value : IValueObjectType) : HTMLInputElement{
+function createCheckBoxElement(event: string, span: HTMLSpanElement, value: IValueObjectType): HTMLInputElement {
     const check = createNewElement('input') as HTMLInputElement
     check.type = 'checkbox'
     value.isCompleted && (check.checked = true, span.style.textDecoration = 'line-through')
@@ -65,4 +66,8 @@ function createCheckBoxElement(event : string, span : HTMLSpanElement, value : I
     return check;
 }
 
-export {view}
+// const handleDeleteClick = (parent : HTMLElement, value : IValueObjectType) => ()=> {
+//     deleteSingleTask(parent,value)
+// }
+
+export { view }

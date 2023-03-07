@@ -39,7 +39,7 @@ function appController() {
             } else {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
-                const putCloud = function(){
+                const putCloud = () => {
                     const result = putMethod(index, span.innerText)
                     if(!result){
                         span.innerText = previousSpanValue
@@ -76,8 +76,8 @@ function setTaskToList(event: Event) {
 
 async function handlePageRefresh() {
     defaultStorageLocation = localStorage.getItem('storage') as string;
-    const tasks: IValueObjectType[] = (defaultStorageLocation === 'CloudStorage') ? await getTodoCloud() : getTodoLocal()
-    tasks.map((task) => prepareTask(task))
+    const tasks = (defaultStorageLocation === 'CloudStorage') ? await getTodoCloud() : getTodoLocal()
+    tasks.map((task : IValueObjectType) => prepareTask(task))
     store.innerText = defaultStorageLocation
 }
 

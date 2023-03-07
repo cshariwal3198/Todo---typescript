@@ -28,8 +28,8 @@ function setTodoLocal(taskValue) {
     localStorage.setItem('todo', JSON.stringify(taskValue));
 }
 function returnRequiredObject(value, existingList) {
-    for (let task of existingList) {
+    existingList.forEach(task => {
         if (task.name === value)
             return task;
-    }
+    });
 }
