@@ -4,9 +4,6 @@ const taskContainer = document.querySelector('.div-to-display') as HTMLDivElemen
 const taskInputBlock = document.querySelector('.form-input') as HTMLInputElement
 const inputError = document.querySelector('#error-div') as HTMLDivElement
 
-let { deleteSingleTask, editSelectedTask, adjustCheckValue } = appController()
-
-
 function view() {
     return {
 
@@ -44,17 +41,16 @@ function appendElementToParent(parent: HTMLElement, child: HTMLElement): void {
     parent.appendChild(child)
 }
 
-function createEditButton(event: string, span: HTMLSpanElement, value: IValueObjectType): HTMLButtonElement {
+function createEditButton(event: string, span: HTMLSpanElement, {id, isCompleted}: IValueObjectType): HTMLButtonElement {
     const editButton = createNewElement('button', 'Edit') as HTMLButtonElement
-    value.isCompleted && (editButton.disabled = true)
-    editButton.addEventListener(event, () => editSelectedTask(editButton, span, value.id as number))
+    isCompleted && (editButton.disabled = true)
+    id && editButton.addEventListener(event, handleEdit(editButton, span, id))
     return editButton;
 }
 
 function createDeleteButton(event: string, value: IValueObjectType): HTMLButtonElement {
     const deleteButton = createNewElement('button', 'X') as HTMLButtonElement
-    deleteButton.addEventListener(event, () => deleteSingleTask((deleteButton.parentNode as HTMLElement), value))
-    // deleteButton.addEventListener(event, handleDeleteClick((deleteButton.parentNode as HTMLElement), value))
+    deleteButton.addEventListener(event, handleDelete(deleteButton, value))
     return deleteButton;
 }
 
@@ -62,12 +58,24 @@ function createCheckBoxElement(event: string, span: HTMLSpanElement, value: IVal
     const check = createNewElement('input') as HTMLInputElement
     check.type = 'checkbox'
     value.isCompleted && (check.checked = true, span.style.textDecoration = 'line-through')
-    check.addEventListener(event, () => adjustCheckValue(check, value))
+    check.addEventListener(event, handleCheck(check, value))
     return check;
 }
 
-// const handleDeleteClick = (parent : HTMLElement, value : IValueObjectType) => ()=> {
-//     deleteSingleTask(parent,value)
-// }
+const { deleteSingleTask, editSelectedTask, adjustCheckValue } = appController()
+const eventsHandlerFunctions = {
+    handleDelete: (deleteButton: HTMLElement, value: IValueObjectType) => () => {
+        deleteSingleTask((deleteButton.parentNode as HTMLElement), value)
+    },
+
+    handleEdit: (editButton: HTMLButtonElement, span: HTMLSpanElement, id: number) => () => {
+        editSelectedTask(editButton, span, id)
+    },
+
+    handleCheck: (check: HTMLInputElement, value: IValueObjectType) => () => {
+        adjustCheckValue(check, value)
+    },
+}
+const { handleDelete, handleCheck, handleEdit } = eventsHandlerFunctions
 
 export { view }

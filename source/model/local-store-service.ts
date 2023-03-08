@@ -38,7 +38,9 @@ function setTodoLocal(taskValue: IValueObjectType[]) {
 }
 
 function returnRequiredObject(value: string, existingList: IValueObjectType[]): IValueObjectType {
-    existingList.forEach(task => {
-        if (task.name === value) return task
+    const resultArray = existingList.filter(task => {
+        if(task.name === value) return task;
     })
+    return resultArray[1]
 }
+returnRequiredObject('task',getTodoLocal())
