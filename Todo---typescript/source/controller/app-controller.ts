@@ -15,6 +15,8 @@ const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud }
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore()
 const { showEmptyInputError, prepareTask } = view()
 
+// testline to check changes in master
+
 handlePageRefresh()
 
 function appController() {
@@ -110,4 +112,3 @@ store.addEventListener('click', switchBetweenStorage);
 (document.querySelector('.all-clear') as HTMLButtonElement).addEventListener('click', clearAllTasks)
 
 export { appController, IValueObjectType }
-
