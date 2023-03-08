@@ -30,6 +30,7 @@ export function localStore() {
 }
 
 export function getTodoLocal(): IValueObjectType[] {
+    // test
     return JSON.parse(`${localStorage.getItem('todo') || []}`)
 }
 
