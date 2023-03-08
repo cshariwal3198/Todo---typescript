@@ -20,7 +20,6 @@ localStorage.setItem('storage', localStorage.getItem('storage') || 'CloudStorage
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore();
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore();
 const { showEmptyInputError, prepareTask } = view();
-// testline to check changes in master
 handlePageRefresh();
 function appController() {
     return {
