@@ -83,16 +83,6 @@ async function handlePageRefresh() {
     store.innerText = defaultStorageLocation
 }
 
-function switchBetweenStorage() {
-    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
-        actualExecutionFunction(() => { localStorage.setItem('storage', 'LocalStorage') },
-            () => { localStorage.setItem('storage', 'CloudStorage') })
-        taskContainer.innerHTML = ''
-        handlePageRefresh();
-        store.innerText = defaultStorageLocation;
-    }
-}
-
 function clearAllTasks() {
     const _eraseFromCloud = async () => {
         const deleteResponse = await deleteAllCloud()
@@ -101,6 +91,16 @@ function clearAllTasks() {
     const _eraseFromLocal = () => { deleteAllLocal(), taskContainer.innerHTML = '' }
     confirm('Your all tasks will be erased, Continue ?') &&
         actualExecutionFunction(_eraseFromCloud, _eraseFromLocal)
+}
+
+function switchBetweenStorage() {
+    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
+        actualExecutionFunction(() => { localStorage.setItem('storage', 'LocalStorage') },
+            () => { localStorage.setItem('storage', 'CloudStorage') })
+        taskContainer.innerHTML = ''
+        handlePageRefresh();
+        store.innerText = defaultStorageLocation;
+    }
 }
 
 function actualExecutionFunction(callback1: Function, callback2: Function): void {
