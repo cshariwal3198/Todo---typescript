@@ -1,31 +1,35 @@
 import { view } from '../view/view.js';
 import { cloudStore } from '../model/cloud-store-service.js';
 import { localStore, getTodoLocal } from '../model/local-store-service.js';
-import { TodoItem, IvalueObjectType } from '../utils/todo-item.js';
+import { TodoItem, IValueObjectType } from '../utils/todo-item.js';
 
 const taskInput = document.querySelector('.form-input') as HTMLInputElement
 const taskContainer = document.querySelector('.div-to-display') as HTMLDivElement
 const store = document.querySelector('.storage') as HTMLButtonElement
-let previousSpanValue : string = ''
- 
-let defaultStorageLocation : string;
+let previousSpanValue: string;
+
+let defaultStorageLocation: string;
 localStorage.setItem('storage', localStorage.getItem('storage') || 'CloudStorage')
 
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore()
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore()
 const { showEmptyInputError, prepareTask } = view()
 
-// This is master branch, line is just to test.
+// testline to check changes in master
 
 handlePageRefresh()
 
 function appController() {
     return {
-        deleteSingleTask: function (parentElement: HTMLElement, value: IvalueObjectType) {
-            actualExecutionFunction(async () => {
-                const result = await deleteMethodCloud(value.id as number)
-                result.status === 204 && taskContainer.removeChild(parentElement)
-            }, () => { deleteTodoLocal(value.name), taskContainer.removeChild(parentElement) })
+        deleteSingleTask: function (parentElement: HTMLElement, { id, name }: IValueObjectType) {
+            const _deleteFromCloud = async () => {
+                if (id) {
+                    const result = await deleteMethodCloud(id)
+                    result.status === 204 && taskContainer.removeChild(parentElement)
+                }
+            }
+            const _deleteFromLocal = () => { deleteTodoLocal(name), taskContainer.removeChild(parentElement) }
+            actualExecutionFunction(_deleteFromCloud, _deleteFromLocal)
         },
 
         editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index: number) {
@@ -37,20 +41,23 @@ function appController() {
             } else {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
-                actualExecutionFunction(() => { putMethod(index, span.innerText) },
-                    () => { editTodoLocal(previousSpanValue, span.innerText) })
+                const _putCloud = () => {
+                    const result = putMethod(index, span.innerText)
+                    if (!result) {
+                        span.innerText = previousSpanValue
+                    }
+                }
+                actualExecutionFunction(_putCloud, editTodoLocal.bind(previousSpanValue, span.innerText))
             }
         },
 
-        adjustCheckValue: async function (check: HTMLInputElement, value: IvalueObjectType) {
+        adjustCheckValue: function (check: HTMLInputElement, { id, name }: IValueObjectType) {
             if (check.checked) {
-                actualExecutionFunction(() => { putMethod(value.id as number, value.name, true) },
-                    () => { editTodoLocal(value.name, value.name, true) });
+                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = true
             } else {
-                actualExecutionFunction(() => { putMethod(value.id as number, value.name, false) },
-                    () => { editTodoLocal(value.name, value.name, false) });
+                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'none';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = false
             }
@@ -61,17 +68,29 @@ function appController() {
 function setTaskToList(event: Event) {
     event.preventDefault()
     const inputValue: string = taskInput.value;
-    showEmptyInputError() && actualExecutionFunction(async () => {
+    const _addToCloud = async () => {
         const postResult = await postMethod(inputValue)
         postResult && prepareTask(postResult)
-    }, () => { createTodoLocal(inputValue), prepareTask(new TodoItem(inputValue)) })
+    }
+    const _addToLocal = () => { createTodoLocal(inputValue), prepareTask(new TodoItem(inputValue)) }
+    showEmptyInputError() && actualExecutionFunction(_addToCloud, _addToLocal)
 }
 
 async function handlePageRefresh() {
     defaultStorageLocation = localStorage.getItem('storage') as string;
-    const tasks: IvalueObjectType[] = (defaultStorageLocation === 'CloudStorage') ? await getTodoCloud() : getTodoLocal()
-    tasks.map((task: IvalueObjectType) => prepareTask(task))
+    const tasks = (defaultStorageLocation === 'CloudStorage') ? await getTodoCloud() : getTodoLocal()
+    tasks.map((task: IValueObjectType) => prepareTask(task))
     store.innerText = defaultStorageLocation
+}
+
+function clearAllTasks() {
+    const _eraseFromCloud = async () => {
+        const deleteResponse = await deleteAllCloud()
+        deleteResponse.status === 200 && (taskContainer.innerHTML = '')
+    }
+    const _eraseFromLocal = () => { deleteAllLocal(), taskContainer.innerHTML = '' }
+    confirm('Your all tasks will be erased, Continue ?') &&
+        actualExecutionFunction(_eraseFromCloud, _eraseFromLocal)
 }
 
 function switchBetweenStorage() {
@@ -82,15 +101,6 @@ function switchBetweenStorage() {
         handlePageRefresh();
         store.innerText = defaultStorageLocation;
     }
-}  
-
-async function clearAllTasks() {
-    confirm('Your all tasks will be erased, Continue ?') &&
-        actualExecutionFunction(async () => {
-            let deleteResponse = await deleteAllCloud()
-            deleteResponse.status === 200 && (taskContainer.innerHTML = '')
-        },
-            () => { deleteAllLocal(), taskContainer.innerHTML = '' })
 }
 
 function actualExecutionFunction(callback1: Function, callback2: Function): void {
@@ -101,4 +111,4 @@ function actualExecutionFunction(callback1: Function, callback2: Function): void
 store.addEventListener('click', switchBetweenStorage);
 (document.querySelector('.all-clear') as HTMLButtonElement).addEventListener('click', clearAllTasks)
 
-export { appController, IvalueObjectType }
+export { appController, IValueObjectType }

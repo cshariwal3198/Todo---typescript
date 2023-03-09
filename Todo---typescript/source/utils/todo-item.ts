@@ -11,7 +11,7 @@ class TodoItem{
     }
 }
 
-interface IvalueObjectType{
+interface IValueObjectType{
     name : string,
     isCompleted? : boolean,
     id? : number
@@ -21,4 +21,4 @@ type OptionHeaderType = {
     [key : string] : string
 }
 
-export { TodoItem, IvalueObjectType, OptionHeaderType }
+export { TodoItem, IValueObjectType, OptionHeaderType }

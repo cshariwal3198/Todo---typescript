@@ -2,7 +2,6 @@ import { appController } from '../controller/app-controller.js';
 const taskContainer = document.querySelector('.div-to-display');
 const taskInputBlock = document.querySelector('.form-input');
 const inputError = document.querySelector('#error-div');
-let { deleteSingleTask, editSelectedTask, adjustCheckValue } = appController();
 function view() {
     return {
         prepareTask: function (value) {
@@ -35,22 +34,35 @@ function createNewElement(elementName, text) {
 function appendElementToParent(parent, child) {
     parent.appendChild(child);
 }
-function createEditButton(event, span, value) {
+function createEditButton(event, span, { id, isCompleted }) {
     const editButton = createNewElement('button', 'Edit');
-    value.isCompleted && (editButton.disabled = true);
-    editButton.addEventListener(event, () => editSelectedTask(editButton, span, value.id));
+    isCompleted && (editButton.disabled = true);
+    id && editButton.addEventListener(event, handleEdit(editButton, span, id));
     return editButton;
 }
 function createDeleteButton(event, value) {
     const deleteButton = createNewElement('button', 'X');
-    deleteButton.addEventListener(event, () => deleteSingleTask(deleteButton.parentNode, value));
+    deleteButton.addEventListener(event, handleDelete(deleteButton, value));
     return deleteButton;
 }
 function createCheckBoxElement(event, span, value) {
     const check = createNewElement('input');
     check.type = 'checkbox';
     value.isCompleted && (check.checked = true, span.style.textDecoration = 'line-through');
-    check.addEventListener(event, () => adjustCheckValue(check, value));
+    check.addEventListener(event, handleCheck(check, value));
     return check;
 }
+const { deleteSingleTask, editSelectedTask, adjustCheckValue } = appController();
+const eventsHandlerFunctions = {
+    handleDelete: (deleteButton, value) => () => {
+        deleteSingleTask(deleteButton.parentNode, value);
+    },
+    handleEdit: (editButton, span, id) => () => {
+        editSelectedTask(editButton, span, id);
+    },
+    handleCheck: (check, value) => () => {
+        adjustCheckValue(check, value);
+    },
+};
+const { handleDelete, handleCheck, handleEdit } = eventsHandlerFunctions;
 export { view };
