@@ -52,7 +52,10 @@ function appController() {
                         span.innerText = previousSpanValue;
                     }
                 };
-                actualExecutionFunction(_putCloud, editTodoLocal.bind(previousSpanValue, span.innerText));
+                const _editLocal = () => {
+                    editTodoLocal(previousSpanValue, span.innerText);
+                };
+                (previousSpanValue !== span.innerText) && actualExecutionFunction(_putCloud, _editLocal);
             }
         },
         adjustCheckValue: function (check, { id, name }) {
