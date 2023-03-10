@@ -10,7 +10,6 @@ export function localStore() {
         },
 
         editTodoLocal: function (previousValue: string, newValue: string, isCompleted?: boolean) {
-            console.log(previousValue, newValue);
             const existingList = getTodoLocal()
             existingList.splice(existingList.indexOf(returnRequiredObject(previousValue, existingList)),
                 1, new TodoItem(newValue, isCompleted))
