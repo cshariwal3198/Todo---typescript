@@ -11,6 +11,7 @@ class OptionObject {
     method;
     body;
     headers;
+
     constructor(method: string, body?: IValueObjectType, header?: OptionHeaderType) {
         this.method = method;
         this.body = JSON.stringify(body);
@@ -44,14 +45,15 @@ function cloudStore() {
         deleteAllCloud: async function () {
             return await setTodoCloud(deleteApiURL, new OptionObject('DELETE'))
         },
+        
     }
 }
 
 async function setTodoCloud(apiURL: string, options: OptionObject) {
-    // try {
+    // try{
     //     return await fetch(apiURL, options)
-    // } catch (error) {
-    //     console.log('Something went wrong...!!!')
+    // } catch(error) {
+    //     console.log("Something went wrong...!!");
     // }
 
     return await fetch(apiURL, options)
