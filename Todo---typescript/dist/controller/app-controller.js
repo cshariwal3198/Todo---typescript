@@ -25,14 +25,16 @@ handlePageRefresh();
 function appController() {
     return {
         deleteSingleTask: function (parentElement, { id, name }) {
-            const _deleteFromCloud = () => __awaiter(this, void 0, void 0, function* () {
+            return __awaiter(this, void 0, void 0, function* () {
                 if (id) {
                     const result = yield deleteMethodCloud(id);
                     result.status === 204 && taskContainer.removeChild(parentElement);
                 }
+                else {
+                    deleteTodoLocal(name);
+                    taskContainer.removeChild(parentElement);
+                }
             });
-            const _deleteFromLocal = () => { deleteTodoLocal(name), taskContainer.removeChild(parentElement); };
-            actualExecutionFunction(_deleteFromCloud, _deleteFromLocal);
         },
         editSelectedTask: function (editButton, span, index) {
             if (editButton.innerText === 'Edit') {
@@ -45,23 +47,26 @@ function appController() {
                 editButton.innerText = 'Edit';
                 span.contentEditable = `${false}`;
                 const _putCloud = () => {
-                    const result = putMethod(index, span.innerText);
+                    const result = index && putMethod(index, span.innerText);
                     if (!result) {
                         span.innerText = previousSpanValue;
                     }
                 };
-                actualExecutionFunction(_putCloud, editTodoLocal.bind(previousSpanValue, span.innerText));
+                const _editLocal = () => {
+                    editTodoLocal(previousSpanValue, span.innerText);
+                };
+                (previousSpanValue !== span.innerText) && actualExecutionFunction(_putCloud, _editLocal);
             }
         },
         adjustCheckValue: function (check, { id, name }) {
             var _a, _b, _c, _d;
             if (check.checked) {
-                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
+                (defaultStorageLocation === 'CloudStorage' && id) ? putMethod(id, name, true) : editTodoLocal(name, name, true);
                 ((_a = check.parentElement) === null || _a === void 0 ? void 0 : _a.firstChild).style.textDecoration = 'line-through';
                 ((_b = check.parentElement) === null || _b === void 0 ? void 0 : _b.children[3]).disabled = true;
             }
             else {
-                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
+                (defaultStorageLocation === 'CloudStorage' && id) ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 ((_c = check.parentElement) === null || _c === void 0 ? void 0 : _c.firstChild).style.textDecoration = 'none';
                 ((_d = check.parentElement) === null || _d === void 0 ? void 0 : _d.children[3]).disabled = false;
             }

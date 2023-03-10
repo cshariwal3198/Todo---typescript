@@ -21,18 +21,17 @@ handlePageRefresh()
 
 function appController() {
     return {
-        deleteSingleTask: function (parentElement: HTMLElement, { id, name }: IValueObjectType) {
-            const _deleteFromCloud = async () => {
-                if (id) {
-                    const result = await deleteMethodCloud(id)
-                    result.status === 204 && taskContainer.removeChild(parentElement)
-                }
+        deleteSingleTask: async function (parentElement: HTMLElement, { id, name }: IValueObjectType) {
+            if (id) {
+                const result = await deleteMethodCloud(id)
+                result.status === 204 && taskContainer.removeChild(parentElement)
+            } else {
+                deleteTodoLocal(name);
+                taskContainer.removeChild(parentElement)
             }
-            const _deleteFromLocal = () => { deleteTodoLocal(name), taskContainer.removeChild(parentElement) }
-            actualExecutionFunction(_deleteFromCloud, _deleteFromLocal)
         },
 
-        editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index: number) {
+        editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index?: number) {
             if (editButton.innerText === 'Edit') {
                 previousSpanValue = span.innerText
                 span.contentEditable = `${true}`
@@ -42,22 +41,25 @@ function appController() {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
                 const _putCloud = () => {
-                    const result = putMethod(index, span.innerText)
+                    const result = index && putMethod(index, span.innerText)
                     if (!result) {
                         span.innerText = previousSpanValue
                     }
                 }
-                actualExecutionFunction(_putCloud, editTodoLocal.bind(previousSpanValue, span.innerText))
+                const _editLocal= ()=>{
+                    editTodoLocal(previousSpanValue, span.innerText)
+                }
+                (previousSpanValue !== span.innerText) && actualExecutionFunction(_putCloud, _editLocal)
             }
         },
 
         adjustCheckValue: function (check: HTMLInputElement, { id, name }: IValueObjectType) {
             if (check.checked) {
-                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
+                (defaultStorageLocation === 'CloudStorage' && id) ? putMethod(id, name, true) : editTodoLocal(name, name, true);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = true
             } else {
-                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
+                (defaultStorageLocation === 'CloudStorage' && id) ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'none';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = false
             }
