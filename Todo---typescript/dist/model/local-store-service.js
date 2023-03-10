@@ -32,6 +32,6 @@ function returnRequiredObject(value, existingList) {
         if (task.name === value)
             return task;
     });
-    return resultArray[1];
+    return resultArray[0];
 }
 returnRequiredObject('task', getTodoLocal());

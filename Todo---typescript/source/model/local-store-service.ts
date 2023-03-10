@@ -41,6 +41,6 @@ function returnRequiredObject(value: string, existingList: IValueObjectType[]): 
     const resultArray = existingList.filter(task => {
         if(task.name === value) return task;
     })
-    return resultArray[1]
+    return resultArray[0]
 }
 returnRequiredObject('task',getTodoLocal())

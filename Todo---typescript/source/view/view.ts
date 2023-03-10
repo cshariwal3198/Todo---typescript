@@ -44,7 +44,7 @@ function appendElementToParent(parent: HTMLElement, child: HTMLElement): void {
 function createEditButton(event: string, span: HTMLSpanElement, {id, isCompleted}: IValueObjectType): HTMLButtonElement {
     const editButton = createNewElement('button', 'Edit') as HTMLButtonElement
     isCompleted && (editButton.disabled = true)
-    id && editButton.addEventListener(event, handleEdit(editButton, span, id))
+    editButton.addEventListener(event, handleEdit(editButton, span, id))
     return editButton;
 }
 
@@ -68,7 +68,7 @@ const eventsHandlerFunctions = {
         deleteSingleTask((deleteButton.parentNode as HTMLElement), value)
     },
 
-    handleEdit: (editButton: HTMLButtonElement, span: HTMLSpanElement, id: number) => () => {
+    handleEdit: (editButton: HTMLButtonElement, span: HTMLSpanElement, id?: number) => () => {
         editSelectedTask(editButton, span, id)
     },
 
