@@ -10,6 +10,7 @@ export function localStore() {
         },
 
         editTodoLocal: function (previousValue: string, newValue: string, isCompleted?: boolean) {
+            console.log(previousValue, newValue);
             const existingList = getTodoLocal()
             existingList.splice(existingList.indexOf(returnRequiredObject(previousValue, existingList)),
                 1, new TodoItem(newValue, isCompleted))
@@ -41,6 +42,6 @@ function returnRequiredObject(value: string, existingList: IValueObjectType[]): 
     const resultArray = existingList.filter(task => {
         if(task.name === value) return task;
     })
-    return resultArray[1]
+    return resultArray[0]
 }
 returnRequiredObject('task',getTodoLocal())
