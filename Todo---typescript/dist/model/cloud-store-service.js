@@ -53,10 +53,10 @@ function cloudStore() {
 }
 function setTodoCloud(apiURL, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        // try {
+        // try{
         //     return await fetch(apiURL, options)
-        // } catch (error) {
-        //     console.log('Something went wrong...!!!')
+        // } catch(error) {
+        //     console.log("Something went wrong...!!");
         // }
         return yield fetch(apiURL, options);
     });

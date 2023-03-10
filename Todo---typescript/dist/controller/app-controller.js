@@ -20,6 +20,7 @@ localStorage.setItem('storage', localStorage.getItem('storage') || 'CloudStorage
 const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud } = cloudStore();
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore();
 const { showEmptyInputError, prepareTask } = view();
+// testline to check changes in master
 handlePageRefresh();
 function appController() {
     return {
@@ -85,14 +86,6 @@ function handlePageRefresh() {
         store.innerText = defaultStorageLocation;
     });
 }
-function switchBetweenStorage() {
-    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
-        actualExecutionFunction(() => { localStorage.setItem('storage', 'LocalStorage'); }, () => { localStorage.setItem('storage', 'CloudStorage'); });
-        taskContainer.innerHTML = '';
-        handlePageRefresh();
-        store.innerText = defaultStorageLocation;
-    }
-}
 function clearAllTasks() {
     const _eraseFromCloud = () => __awaiter(this, void 0, void 0, function* () {
         const deleteResponse = yield deleteAllCloud();
@@ -101,6 +94,14 @@ function clearAllTasks() {
     const _eraseFromLocal = () => { deleteAllLocal(), taskContainer.innerHTML = ''; };
     confirm('Your all tasks will be erased, Continue ?') &&
         actualExecutionFunction(_eraseFromCloud, _eraseFromLocal);
+}
+function switchBetweenStorage() {
+    if (confirm(`You are switching your default Storage. Press Ok to proceed`)) {
+        actualExecutionFunction(() => { localStorage.setItem('storage', 'LocalStorage'); }, () => { localStorage.setItem('storage', 'CloudStorage'); });
+        taskContainer.innerHTML = '';
+        handlePageRefresh();
+        store.innerText = defaultStorageLocation;
+    }
 }
 function actualExecutionFunction(callback1, callback2) {
     localStorage.getItem('storage') === 'CloudStorage' ? callback1() : callback2();
