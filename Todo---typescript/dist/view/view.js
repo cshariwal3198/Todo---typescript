@@ -37,7 +37,7 @@ function appendElementToParent(parent, child) {
 function createEditButton(event, span, { id, isCompleted }) {
     const editButton = createNewElement('button', 'Edit');
     isCompleted && (editButton.disabled = true);
-    id && editButton.addEventListener(event, handleEdit(editButton, span, id));
+    editButton.addEventListener(event, handleEdit(editButton, span, id));
     return editButton;
 }
 function createDeleteButton(event, value) {

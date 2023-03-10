@@ -50,12 +50,6 @@ function cloudStore() {
 }
 
 async function setTodoCloud(apiURL: string, options: OptionObject) {
-    // try{
-    //     return await fetch(apiURL, options)
-    // } catch(error) {
-    //     console.log("Something went wrong...!!");
-    // }
-
     return await fetch(apiURL, options)
 }
 

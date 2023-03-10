@@ -15,24 +15,21 @@ const { postMethod, deleteMethodCloud, getTodoCloud, putMethod, deleteAllCloud }
 const { createTodoLocal, editTodoLocal, deleteTodoLocal, deleteAllLocal } = localStore()
 const { showEmptyInputError, prepareTask } = view()
 
-// testline to check changes in master
-
 handlePageRefresh()
 
 function appController() {
     return {
-        deleteSingleTask: function (parentElement: HTMLElement, { id, name }: IValueObjectType) {
-            const _deleteFromCloud = async () => {
-                if (id) {
-                    const result = await deleteMethodCloud(id)
-                    result.status === 204 && taskContainer.removeChild(parentElement)
-                }
+        deleteSingleTask: async function (parentElement: HTMLElement, { id, name }: IValueObjectType) {
+            if (id) {
+                const result = await deleteMethodCloud(id)
+                result.status === 204 && taskContainer.removeChild(parentElement)
+            } else {
+                deleteTodoLocal(name),
+                    taskContainer.removeChild(parentElement)
             }
-            const _deleteFromLocal = () => { deleteTodoLocal(name), taskContainer.removeChild(parentElement) }
-            actualExecutionFunction(_deleteFromCloud, _deleteFromLocal)
         },
 
-        editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index: number) {
+        editSelectedTask: function (editButton: HTMLButtonElement, span: HTMLSpanElement, index?: number) {
             if (editButton.innerText === 'Edit') {
                 previousSpanValue = span.innerText
                 span.contentEditable = `${true}`
@@ -42,22 +39,19 @@ function appController() {
                 editButton.innerText = 'Edit'
                 span.contentEditable = `${false}`
                 const _putCloud = () => {
-                    const result = putMethod(index, span.innerText)
-                    if (!result) {
-                        span.innerText = previousSpanValue
-                    }
+                    index && putMethod(index, span.innerText)
                 }
-                actualExecutionFunction(_putCloud, editTodoLocal.bind(previousSpanValue, span.innerText))
+                actualExecutionFunction(_putCloud, editInLocal(previousSpanValue, span))
             }
         },
 
         adjustCheckValue: function (check: HTMLInputElement, { id, name }: IValueObjectType) {
             if (check.checked) {
-                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, true) : editTodoLocal(name, name, true);
+                (defaultStorageLocation === 'CloudStorage' && id) ? putMethod(id, name, true) : editTodoLocal(name, name, true);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'line-through';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = true
             } else {
-                defaultStorageLocation === 'CloudStorage' && id ? putMethod(id, name, false) : editTodoLocal(name, name, false);
+                (defaultStorageLocation === 'CloudStorage' && id) ? putMethod(id, name, false) : editTodoLocal(name, name, false);
                 (check.parentElement?.firstChild as HTMLSpanElement).style.textDecoration = 'none';
                 (check.parentElement?.children[3] as HTMLButtonElement).disabled = false
             }
@@ -68,12 +62,7 @@ function appController() {
 function setTaskToList(event: Event) {
     event.preventDefault()
     const inputValue: string = taskInput.value;
-    const _addToCloud = async () => {
-        const postResult = await postMethod(inputValue)
-        postResult && prepareTask(postResult)
-    }
-    const _addToLocal = () => { createTodoLocal(inputValue), prepareTask(new TodoItem(inputValue)) }
-    showEmptyInputError() && actualExecutionFunction(_addToCloud, _addToLocal)
+    showEmptyInputError() && actualExecutionFunction(addToCloud(inputValue), addToLocal(inputValue))
 }
 
 async function handlePageRefresh() {
@@ -84,13 +73,8 @@ async function handlePageRefresh() {
 }
 
 function clearAllTasks() {
-    const _eraseFromCloud = async () => {
-        const deleteResponse = await deleteAllCloud()
-        deleteResponse.status === 200 && (taskContainer.innerHTML = '')
-    }
-    const _eraseFromLocal = () => { deleteAllLocal(), taskContainer.innerHTML = '' }
     confirm('Your all tasks will be erased, Continue ?') &&
-        actualExecutionFunction(_eraseFromCloud, _eraseFromLocal)
+        actualExecutionFunction(eraseAllCloud, eraseAllLocal)
 }
 
 function switchBetweenStorage() {
@@ -106,6 +90,32 @@ function switchBetweenStorage() {
 function actualExecutionFunction(callback1: Function, callback2: Function): void {
     localStorage.getItem('storage') === 'CloudStorage' ? callback1() : callback2()
 }
+
+const privateFunctionObject = {
+    addToCloud: (inputValue: string) => async function () {
+        const postResult = await postMethod(inputValue)
+        postResult && prepareTask(postResult)
+    },
+
+    addToLocal: (inputValue: string) => function () {
+        createTodoLocal(inputValue),
+            prepareTask(new TodoItem(inputValue))
+    },
+
+    editInLocal: (previousSpanValue: string, span: HTMLSpanElement) => function () {
+        editTodoLocal(previousSpanValue, span.innerText)
+    },
+
+    eraseAllCloud: async function () {
+        const deleteResponse = await deleteAllCloud()
+        deleteResponse.status === 200 && (taskContainer.innerHTML = '')
+    },
+
+    eraseAllLocal: function () {
+        deleteAllLocal(), taskContainer.innerHTML = ''
+    },
+};
+const { addToCloud, addToLocal, editInLocal, eraseAllCloud, eraseAllLocal } = privateFunctionObject;
 
 (document.querySelector('form') as HTMLFormElement).addEventListener('submit', setTaskToList);
 store.addEventListener('click', switchBetweenStorage);
