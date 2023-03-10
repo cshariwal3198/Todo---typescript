@@ -80,7 +80,7 @@ function handlePageRefresh() {
     });
 }
 function clearAllTasks() {
-    confirm('Your all tasks will be erased, Continue ?') &&
+    confirm('Your all tasks will be erased, Continue?') &&
         actualExecutionFunction(eraseAllCloud, eraseAllLocal);
 }
 function switchBetweenStorage() {

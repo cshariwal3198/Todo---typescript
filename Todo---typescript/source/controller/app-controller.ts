@@ -25,7 +25,7 @@ function appController() {
                 result.status === 204 && taskContainer.removeChild(parentElement)
             } else {
                 deleteTodoLocal(name),
-                    taskContainer.removeChild(parentElement)
+                taskContainer.removeChild(parentElement)
             }
         },
 
@@ -73,7 +73,7 @@ async function handlePageRefresh() {
 }
 
 function clearAllTasks() {
-    confirm('Your all tasks will be erased, Continue ?') &&
+    confirm('Your all tasks will be erased, Continue?') && 
         actualExecutionFunction(eraseAllCloud, eraseAllLocal)
 }
 
@@ -92,6 +92,7 @@ function actualExecutionFunction(callback1: Function, callback2: Function): void
 }
 
 const privateFunctionObject = {
+
     addToCloud: (inputValue: string) => async function () {
         const postResult = await postMethod(inputValue)
         postResult && prepareTask(postResult)
